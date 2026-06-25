@@ -13,6 +13,9 @@ import Notifications from "./pages/student/Notifications"
 import ProfileSettings from "./pages/student/ProfileSettings"
 import Support from "./pages/student/Support"
 import TeacherDashboard from "./pages/teacher/TeacherDashboard"
+import TeacherMyCourses from "./pages/teacher/MyCourses"
+import CreateCourse from "./pages/teacher/CreateCourse"
+import Students from "./pages/teacher/Students"
 
 function App() {
   return (
@@ -32,6 +35,9 @@ function App() {
         <Route path="/student/profile" element={<ProfileSettings />} />
         <Route path="/student/support" element={<Support />} />
         <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+        <Route path="/teacher/courses" element={<TeacherMyCourses />} />
+        <Route path="/teacher/courses/create" element={<CreateCourse />} />
+        <Route path="/teacher/students" element={<Students />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

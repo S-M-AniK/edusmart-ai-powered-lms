@@ -19,6 +19,8 @@ import Students from "./pages/teacher/Students"
 import CurriculumManager from "./pages/teacher/CurriculumManager"
 import Analytics from "./pages/teacher/Analytics"
 import TeacherReviews from "./pages/teacher/Reviews"
+import Announcements from "./pages/teacher/Announcements"
+import Messages from "./pages/teacher/Messages"
 
 function App() {
   return (
@@ -44,6 +46,8 @@ function App() {
         <Route path="/teacher/curriculum" element={<CurriculumManager />} />
         <Route path="/teacher/analytics" element={<Analytics />} />
         <Route path="/teacher/reviews" element={<TeacherReviews />} />
+        <Route path="/teacher/announcements" element={<Announcements />} />
+        <Route path="/teacher/messages" element={<Messages />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

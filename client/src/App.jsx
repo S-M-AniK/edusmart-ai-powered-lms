@@ -21,6 +21,9 @@ import Analytics from "./pages/teacher/Analytics"
 import TeacherReviews from "./pages/teacher/Reviews"
 import Announcements from "./pages/teacher/Announcements"
 import Messages from "./pages/teacher/Messages"
+import TeacherAIAssistant from "./pages/teacher/TeacherAIAssistant"
+import TeacherNotifications from "./pages/teacher/TeacherNotifications"
+import TeacherProfile from "./pages/teacher/TeacherProfile"
 
 function App() {
   return (
@@ -48,6 +51,9 @@ function App() {
         <Route path="/teacher/reviews" element={<TeacherReviews />} />
         <Route path="/teacher/announcements" element={<Announcements />} />
         <Route path="/teacher/messages" element={<Messages />} />
+        <Route path="/teacher/ai-assistant" element={<TeacherAIAssistant />} />
+        <Route path="/teacher/notifications" element={<TeacherNotifications />} />
+        <Route path="/teacher/profile" element={<TeacherProfile />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

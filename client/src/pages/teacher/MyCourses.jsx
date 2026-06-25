@@ -11,14 +11,14 @@ const courses = [
 function MyCourses() {
   return (
     <TeacherLayout>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-8" style={{ animation: "fadeIn 0.6s ease-out" }}>
         <div>
           <h1 className="text-2xl font-bold text-slate-900">My Courses</h1>
           <p className="text-slate-500 mt-1">Manage the courses you teach.</p>
         </div>
         <Link
           to="/teacher/courses/create"
-          className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-white bg-[#10B981] hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-white bg-[#10B981] hover:opacity-90 hover:scale-[1.03] active:scale-[0.97] transition-all"
         >
           <Plus size={18} />
           New Course
@@ -26,10 +26,11 @@ function MyCourses() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {courses.map((course) => (
+        {courses.map((course, i) => (
           <div
             key={course.name}
-            className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-md transition-shadow"
+            className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+            style={{ animation: `fadeIn 0.6s ease-out ${i * 0.08}s both` }}
           >
             <div className={`h-32 bg-gradient-to-br ${course.image} relative`}>
               <span
@@ -56,7 +57,7 @@ function MyCourses() {
                 )}
               </div>
 
-              <button className="w-full py-2.5 rounded-lg font-medium text-[#10B981] border border-[#10B981] hover:bg-[#10B981]/5 transition-colors flex items-center justify-center gap-2">
+              <button className="w-full py-2.5 rounded-lg font-medium text-[#10B981] border border-[#10B981] hover:bg-[#10B981] hover:text-white transition-all duration-200 flex items-center justify-center gap-2">
                 <Pencil size={16} />
                 Manage Course
               </button>

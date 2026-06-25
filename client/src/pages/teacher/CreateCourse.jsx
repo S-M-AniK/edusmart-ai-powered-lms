@@ -15,12 +15,15 @@ function CreateCourse() {
 
   return (
     <TeacherLayout>
-      <div className="mb-8">
+      <div className="mb-8" style={{ animation: "fadeIn 0.6s ease-out" }}>
         <h1 className="text-2xl font-bold text-slate-900">Create New Course</h1>
         <p className="text-slate-500 mt-1">Fill in the details to publish a new course.</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 p-6 max-w-2xl">
+      <div
+        className="bg-white rounded-xl border border-slate-200 p-6 max-w-2xl"
+        style={{ animation: "fadeIn 0.6s ease-out 0.3s both" }}
+      >
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
@@ -32,7 +35,7 @@ function CreateCourse() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Complete JavaScript Bootcamp"
-              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
+              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] transition-shadow"
             />
           </div>
 
@@ -44,7 +47,7 @@ function CreateCourse() {
               required
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
+              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] transition-shadow"
             >
               <option value="">Select a category</option>
               <option value="programming">Programming</option>
@@ -64,7 +67,7 @@ function CreateCourse() {
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
               placeholder="Describe what students will learn"
-              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] resize-none"
+              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] resize-none transition-shadow"
             />
           </div>
 
@@ -80,7 +83,7 @@ function CreateCourse() {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="0.00"
-                className="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
+                className="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] transition-shadow"
               />
             </div>
           </div>
@@ -89,7 +92,7 @@ function CreateCourse() {
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
               Course Thumbnail
             </label>
-            <div className="border-2 border-dashed border-slate-200 rounded-lg p-8 text-center">
+            <div className="border-2 border-dashed border-slate-200 rounded-lg p-8 text-center hover:border-[#10B981] hover:bg-[#10B981]/5 transition-all duration-300 cursor-pointer">
               <Upload size={28} className="text-slate-400 mx-auto mb-2" />
               <p className="text-sm text-slate-500">Click to upload or drag and drop</p>
             </div>
@@ -97,7 +100,7 @@ function CreateCourse() {
 
           <button
             type="submit"
-            className="px-6 py-2.5 rounded-lg font-medium text-white bg-[#10B981] hover:opacity-90 transition-opacity"
+            className="px-6 py-2.5 rounded-lg font-medium text-white bg-[#10B981] hover:opacity-90 hover:scale-[1.03] active:scale-[0.97] transition-all"
           >
             Create Course
           </button>

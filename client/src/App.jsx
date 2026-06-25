@@ -16,6 +16,9 @@ import TeacherDashboard from "./pages/teacher/TeacherDashboard"
 import TeacherMyCourses from "./pages/teacher/MyCourses"
 import CreateCourse from "./pages/teacher/CreateCourse"
 import Students from "./pages/teacher/Students"
+import CurriculumManager from "./pages/teacher/CurriculumManager"
+import Analytics from "./pages/teacher/Analytics"
+import TeacherReviews from "./pages/teacher/Reviews"
 
 function App() {
   return (
@@ -38,6 +41,9 @@ function App() {
         <Route path="/teacher/courses" element={<TeacherMyCourses />} />
         <Route path="/teacher/courses/create" element={<CreateCourse />} />
         <Route path="/teacher/students" element={<Students />} />
+        <Route path="/teacher/curriculum" element={<CurriculumManager />} />
+        <Route path="/teacher/analytics" element={<Analytics />} />
+        <Route path="/teacher/reviews" element={<TeacherReviews />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

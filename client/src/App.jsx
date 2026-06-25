@@ -12,6 +12,7 @@ import AIAssistant from "./pages/student/AIAssistant"
 import Notifications from "./pages/student/Notifications"
 import ProfileSettings from "./pages/student/ProfileSettings"
 import Support from "./pages/student/Support"
+import TeacherDashboard from "./pages/teacher/TeacherDashboard"
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/student/notifications" element={<Notifications />} />
         <Route path="/student/profile" element={<ProfileSettings />} />
         <Route path="/student/support" element={<Support />} />
+        <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

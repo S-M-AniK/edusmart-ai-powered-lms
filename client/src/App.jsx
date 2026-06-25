@@ -8,6 +8,10 @@ import Wishlist from "./pages/student/Wishlist"
 import RecommendedCourses from "./pages/student/RecommendedCourses"
 import Certificates from "./pages/student/Certificates"
 import MyReviews from "./pages/student/MyReviews"
+import AIAssistant from "./pages/student/AIAssistant"
+import Notifications from "./pages/student/Notifications"
+import ProfileSettings from "./pages/student/ProfileSettings"
+import Support from "./pages/student/Support"
 
 function App() {
   return (
@@ -22,6 +26,10 @@ function App() {
         <Route path="/student/recommended" element={<RecommendedCourses />} />
         <Route path="/student/certificates" element={<Certificates />} />
         <Route path="/student/reviews" element={<MyReviews />} />
+        <Route path="/student/ai-assistant" element={<AIAssistant />} />
+        <Route path="/student/notifications" element={<Notifications />} />
+        <Route path="/student/profile" element={<ProfileSettings />} />
+        <Route path="/student/support" element={<Support />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

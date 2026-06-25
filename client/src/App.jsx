@@ -5,6 +5,9 @@ import StudentDashboard from "./pages/student/StudentDashboard"
 import MyCourses from "./pages/student/MyCourses"
 import LearningProgress from "./pages/student/LearningProgress"
 import Wishlist from "./pages/student/Wishlist"
+import RecommendedCourses from "./pages/student/RecommendedCourses"
+import Certificates from "./pages/student/Certificates"
+import MyReviews from "./pages/student/MyReviews"
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
         <Route path="/student/courses" element={<MyCourses />} />
         <Route path="/student/progress" element={<LearningProgress />} />
         <Route path="/student/wishlist" element={<Wishlist />} />
+        <Route path="/student/recommended" element={<RecommendedCourses />} />
+        <Route path="/student/certificates" element={<Certificates />} />
+        <Route path="/student/reviews" element={<MyReviews />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

@@ -29,6 +29,8 @@ import ManageTeachers from "./pages/admin/ManageTeachers"
 import ManageStudents from "./pages/admin/ManageStudents"
 import ManageCourses from "./pages/admin/ManageCourses"
 import ManageCategories from "./pages/admin/ManageCategories"
+import ManageReviews from "./pages/admin/ManageReviews"
+import ManageBlogs from "./pages/admin/ManageBlogs"
 
 function App() {
   return (
@@ -64,6 +66,8 @@ function App() {
         <Route path="/admin/students" element={<ManageStudents />} />
         <Route path="/admin/courses" element={<ManageCourses />} />
         <Route path="/admin/categories" element={<ManageCategories />} />
+        <Route path="/admin/reviews" element={<ManageReviews />} />
+        <Route path="/admin/blogs" element={<ManageBlogs />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

@@ -31,6 +31,8 @@ import ManageCourses from "./pages/admin/ManageCourses"
 import ManageCategories from "./pages/admin/ManageCategories"
 import ManageReviews from "./pages/admin/ManageReviews"
 import ManageBlogs from "./pages/admin/ManageBlogs"
+import ContactMessages from "./pages/admin/ContactMessages"
+import AdminCertificates from "./pages/admin/AdminCertificates"
 
 function App() {
   return (
@@ -68,6 +70,8 @@ function App() {
         <Route path="/admin/categories" element={<ManageCategories />} />
         <Route path="/admin/reviews" element={<ManageReviews />} />
         <Route path="/admin/blogs" element={<ManageBlogs />} />
+        <Route path="/admin/messages" element={<ContactMessages />} />
+        <Route path="/admin/certificates" element={<AdminCertificates />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

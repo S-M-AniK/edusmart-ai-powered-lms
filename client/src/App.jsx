@@ -24,6 +24,7 @@ import Messages from "./pages/teacher/Messages"
 import TeacherAIAssistant from "./pages/teacher/TeacherAIAssistant"
 import TeacherNotifications from "./pages/teacher/TeacherNotifications"
 import TeacherProfile from "./pages/teacher/TeacherProfile"
+import AdminDashboard from "./pages/admin/AdminDashboard"
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
         <Route path="/teacher/ai-assistant" element={<TeacherAIAssistant />} />
         <Route path="/teacher/notifications" element={<TeacherNotifications />} />
         <Route path="/teacher/profile" element={<TeacherProfile />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

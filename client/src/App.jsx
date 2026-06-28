@@ -35,6 +35,8 @@ import ContactMessages from "./pages/admin/ContactMessages"
 import AdminCertificates from "./pages/admin/AdminCertificates"
 import AdminAnnouncements from "./pages/admin/AdminAnnouncements"
 import AdminNotifications from "./pages/admin/AdminNotifications"
+import AdminAnalytics from "./pages/admin/AdminAnalytics"
+import AdminSettings from "./pages/admin/AdminSettings"
 
 function App() {
   return (
@@ -76,6 +78,8 @@ function App() {
         <Route path="/admin/certificates" element={<AdminCertificates />} />
         <Route path="/admin/announcements" element={<AdminAnnouncements />} />
         <Route path="/admin/notifications" element={<AdminNotifications />} />
+        <Route path="/admin/analytics" element={<AdminAnalytics />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

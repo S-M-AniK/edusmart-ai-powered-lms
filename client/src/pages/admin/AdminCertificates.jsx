@@ -6,6 +6,8 @@ const certificates = [
   { student: "Nusrat Jahan", course: "UI/UX Design Basics", instructor: "Imran Hossain", date: "Mar 3, 2026" },
   { student: "Rifat Karim", course: "React for Beginners", instructor: "Sarah Khan", date: "Jun 1, 2026" },
   { student: "Farha Rahman", course: "Advanced State Management", instructor: "Sarah Khan", date: "Jun 15, 2026" },
+  { student: "Nadim Rahman", course: "Advanced State Management", instructor: "Sarah Khan", date: "Jun 19, 2026" },
+  
 ]
 
 function AdminCertificates() {

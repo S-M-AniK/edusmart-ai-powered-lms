@@ -31,13 +31,13 @@ function ContactMessages() {
           <div
             key={msg.email}
             className={`bg-white rounded-xl border p-5 hover:shadow-md transition-all duration-300 ${
-              msg.read ? "border-slate-200" : "border-[#6366F1]/30 bg-[#6366F1]/[0.02]"
+              msg.read ? "border-slate-200" : "border-[#6366F1]/30 bg-[#6366F1]/2"
             }`}
             style={{ animation: `fadeIn 0.5s ease-out ${i * 0.08}s both` }}
           >
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-[#6366F1] text-white flex items-center justify-center text-sm font-medium flex-shrink-0">
+                <div className="w-9 h-9 rounded-full bg-[#6366F1] text-white flex items-center justify-center text-sm font-medium shrink-0">
                   {msg.name.charAt(0)}
                 </div>
                 <div>

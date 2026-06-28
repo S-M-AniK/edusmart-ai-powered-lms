@@ -33,6 +33,8 @@ import ManageReviews from "./pages/admin/ManageReviews"
 import ManageBlogs from "./pages/admin/ManageBlogs"
 import ContactMessages from "./pages/admin/ContactMessages"
 import AdminCertificates from "./pages/admin/AdminCertificates"
+import AdminAnnouncements from "./pages/admin/AdminAnnouncements"
+import AdminNotifications from "./pages/admin/AdminNotifications"
 
 function App() {
   return (
@@ -72,6 +74,8 @@ function App() {
         <Route path="/admin/blogs" element={<ManageBlogs />} />
         <Route path="/admin/messages" element={<ContactMessages />} />
         <Route path="/admin/certificates" element={<AdminCertificates />} />
+        <Route path="/admin/announcements" element={<AdminAnnouncements />} />
+        <Route path="/admin/notifications" element={<AdminNotifications />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

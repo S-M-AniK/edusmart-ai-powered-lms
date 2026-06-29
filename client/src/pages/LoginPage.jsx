@@ -1,14 +1,59 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
 import { Mail, Lock, Eye, EyeOff } from "lucide-react"
 
 function LoginPage() {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const [fieldErrors, setFieldErrors] = useState({})
+  const [loading, setLoading] = useState(false)
 
-  function handleSubmit(e) {
+  function validate() {
+    const errors = {}
+    if (!email.trim()) errors.email = "This email field needs to be filled out"
+    if (!password.trim()) errors.password = "This password field needs to be filled out"
+    return errors
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault()
-    console.log("Login attempt:", { email, password })
+    setError("")
+
+    const errors = validate()
+    setFieldErrors(errors)
+    if (Object.keys(errors).length > 0) return
+
+    setLoading(true)
+    try {
+      const res = await axios.post("http://localhost:8000/api/auth/login", {
+        email,
+        password,
+      })
+
+      localStorage.setItem("token", res.data.token)
+      localStorage.setItem("user", JSON.stringify(res.data.user))
+
+      const role = res.data.user.role
+      if (role === "teacher") {
+        navigate("/teacher/dashboard")
+      } else if (role === "admin") {
+        navigate("/admin/dashboard")
+      } else {
+        navigate("/student/dashboard")
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function labelClass(field) {
+    return `block text-sm font-medium mb-1.5 ${fieldErrors[field] ? "text-rose-500" : "text-slate-700"}`
   }
 
   return (
@@ -52,28 +97,36 @@ function LoginPage() {
           <h2 className="text-2xl font-bold text-slate-900 mb-1">Welcome back</h2>
           <p className="text-slate-500 mb-8">Sign in to continue to your dashboard.</p>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          {error && (
+            <div className="mb-5 px-4 py-3 rounded-lg bg-rose-50 text-rose-600 text-sm">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} noValidate className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                Email address
+              <label className={labelClass("email")}>
+                Email address {fieldErrors.email && <span className="text-rose-500">*</span>}
               </label>
               <div className="relative">
                 <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="email"
-                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   className="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#6366F1] transition-shadow"
                 />
               </div>
+              {fieldErrors.email && (
+                <p className="text-sm text-rose-500 mt-1.5">{fieldErrors.email}</p>
+              )}
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-medium text-slate-700">
-                  Password
+                <label className={labelClass("password").replace("mb-1.5", "")}>
+                  Password {fieldErrors.password && <span className="text-rose-500">*</span>}
                 </label>
                 <a href="#" className="text-sm font-medium text-[#6366F1]">
                   Forgot password?
@@ -83,7 +136,6 @@ function LoginPage() {
                 <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type={showPassword ? "text" : "password"}
-                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
@@ -97,13 +149,17 @@ function LoginPage() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              {fieldErrors.password && (
+                <p className="text-sm text-rose-500 mt-1.5">{fieldErrors.password}</p>
+              )}
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 rounded-lg font-semibold text-white bg-[#6366F1] hover:opacity-90 transition-opacity"
+              disabled={loading}
+              className="w-full py-3 rounded-lg font-semibold text-white bg-[#6366F1] hover:opacity-90 transition-opacity disabled:opacity-60"
             >
-              Sign in
+              {loading ? "Signing in..." : "Sign in"}
             </button>
           </form>
 

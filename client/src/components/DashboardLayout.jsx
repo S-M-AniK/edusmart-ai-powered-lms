@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import {
   LayoutDashboard,
   BookOpen,
@@ -30,6 +30,13 @@ const menuItems = [
 
 function DashboardLayout({ children }) {
   const location = useLocation()
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    navigate("/login")
+  }
 
   return (
     <div className="min-h-screen flex bg-[#FAFAF8]">
@@ -63,7 +70,10 @@ function DashboardLayout({ children }) {
         </nav>
 
         <div className="px-3 py-4 border-t border-white/10">
-          <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white w-full transition-colors">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/70 hover:bg-white/10 hover:text-white w-full transition-colors"
+          >
             <LogOut size={18} />
             Logout
           </button>

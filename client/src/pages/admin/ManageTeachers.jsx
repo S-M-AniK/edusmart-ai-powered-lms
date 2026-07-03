@@ -1,29 +1,54 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import axios from "axios"
 import AdminLayout from "../../components/AdminLayout"
 import { Plus, Search, Mail, Trash2, X } from "lucide-react"
 
-const initialTeachers = [
-  { name: "Sarah Khan", email: "sarah.khan@example.com", courses: 3, students: 192 },
-  { name: "Imran Hossain", email: "imran@example.com", courses: 2, students: 88 },
-  { name: "Nadia Islam", email: "nadia@example.com", courses: 1, students: 64 },
-]
-
 function ManageTeachers() {
-  const [teachers, setTeachers] = useState(initialTeachers)
+  const [teachers, setTeachers] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  function handleCreate(e) {
-    e.preventDefault()
-    setTeachers((prev) => [...prev, { name, email, courses: 0, students: 0 }])
-    setName("")
-    setEmail("")
-    setShowModal(false)
+  useEffect(() => {
+    fetchTeachers()
+  }, [])
+
+  async function fetchTeachers() {
+    try {
+      const res = await axios.get("http://localhost:8000/api/users/teachers")
+      setTeachers(res.data.teachers)
+    } catch (err) {
+      console.error("Failed to fetch teachers:", err)
+    }
   }
 
-  function handleDelete(email) {
-    setTeachers((prev) => prev.filter((t) => t.email !== email))
+  async function handleCreate(e) {
+    e.preventDefault()
+    setError("")
+    setLoading(true)
+    try {
+      await axios.post("http://localhost:8000/api/users/teachers", { name, email })
+      setName("")
+      setEmail("")
+      setShowModal(false)
+      fetchTeachers()
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!window.confirm("Are you sure you want to delete this teacher?")) return
+    try {
+      await axios.delete(`http://localhost:8000/api/users/teachers/${id}`)
+      fetchTeachers()
+    } catch (err) {
+      console.error("Failed to delete teacher:", err)
+    }
   }
 
   return (
@@ -65,40 +90,48 @@ function ManageTeachers() {
             </tr>
           </thead>
           <tbody>
-            {teachers.map((teacher, i) => (
-              <tr
-                key={teacher.email}
-                className="border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors duration-150"
-                style={{ animation: `fadeIn 0.4s ease-out ${i * 0.06}s both` }}
-              >
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-[#6366F1] text-white flex items-center justify-center text-sm font-medium">
-                      {teacher.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="font-medium text-slate-900">{teacher.name}</p>
-                      <p className="text-xs text-slate-400">{teacher.email}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-slate-600">{teacher.courses}</td>
-                <td className="px-6 py-4 text-slate-600">{teacher.students}</td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-3">
-                    <button className="text-slate-400 hover:text-[#6366F1] hover:scale-110 transition-all">
-                      <Mail size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(teacher.email)}
-                      className="text-slate-400 hover:text-rose-500 hover:scale-110 transition-all"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
+            {teachers.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="px-6 py-8 text-center text-slate-400">
+                  No teachers yet. Add one!
                 </td>
               </tr>
-            ))}
+            ) : (
+              teachers.map((teacher, i) => (
+                <tr
+                  key={teacher.id}
+                  className="border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors duration-150"
+                  style={{ animation: `fadeIn 0.3s ease-out ${i * 0.06}s both` }}
+                >
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-[#6366F1] text-white flex items-center justify-center text-sm font-medium">
+                        {teacher.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="font-medium text-slate-900">{teacher.name}</p>
+                        <p className="text-xs text-slate-400">{teacher.email}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-slate-600">0</td>
+                  <td className="px-6 py-4 text-slate-600">0</td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex items-center justify-end gap-3">
+                      <button className="text-slate-400 hover:text-[#6366F1] hover:scale-110 transition-all">
+                        <Mail size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(teacher.id)}
+                        className="text-slate-400 hover:text-rose-500 hover:scale-110 transition-all"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -108,10 +141,17 @@ function ManageTeachers() {
           <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold text-slate-900">Add New Teacher</h2>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600">
+              <button onClick={() => { setShowModal(false); setError("") }} className="text-slate-400 hover:text-slate-600">
                 <X size={20} />
               </button>
             </div>
+
+            {error && (
+              <div className="mb-4 px-4 py-3 rounded-lg bg-rose-50 text-rose-600 text-sm">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1.5">Full name</label>
@@ -136,13 +176,14 @@ function ManageTeachers() {
                 />
               </div>
               <p className="text-xs text-slate-400">
-                A temporary password will be emailed to the teacher upon creation.
+                Default password: <strong>teacher123</strong> — teacher can change it after first login.
               </p>
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-lg font-medium text-white bg-[#6366F1] hover:opacity-90 transition-opacity"
+                disabled={loading}
+                className="w-full py-2.5 rounded-lg font-medium text-white bg-[#6366F1] hover:opacity-90 transition-opacity disabled:opacity-60"
               >
-                Create Teacher Account
+                {loading ? "Creating..." : "Create Teacher Account"}
               </button>
             </form>
           </div>

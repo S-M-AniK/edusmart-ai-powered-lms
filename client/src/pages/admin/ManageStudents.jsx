@@ -1,33 +1,54 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import axios from "axios"
 import AdminLayout from "../../components/AdminLayout"
 import { Search, Trash2, Mail, Plus, X } from "lucide-react"
 
-const initialStudents = [
-  { name: "Tanvir Ahmed", email: "tanvir@example.com", courses: 3, joined: "Mar 12, 2026" },
-  { name: "Nusrat Jahan", email: "nusrat@example.com", courses: 2, joined: "Apr 5, 2026" },
-  { name: "Rifat Karim", email: "rifat@example.com", courses: 1, joined: "May 20, 2026" },
-  { name: "Farha Rahman", email: "farha@example.com", courses: 4, joined: "Jun 1, 2026" },
-]
-
 function ManageStudents() {
-  const [students, setStudents] = useState(initialStudents)
+  const [students, setStudents] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  function handleCreate(e) {
-    e.preventDefault()
-    setStudents((prev) => [
-      ...prev,
-      { name, email, courses: 0, joined: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) },
-    ])
-    setName("")
-    setEmail("")
-    setShowModal(false)
+  useEffect(() => {
+    fetchStudents()
+  }, [])
+
+  async function fetchStudents() {
+    try {
+      const res = await axios.get("http://localhost:8000/api/users/students")
+      setStudents(res.data.students)
+    } catch (err) {
+      console.error("Failed to fetch students:", err)
+    }
   }
 
-  function handleDelete(email) {
-    setStudents((prev) => prev.filter((s) => s.email !== email))
+  async function handleCreate(e) {
+    e.preventDefault()
+    setError("")
+    setLoading(true)
+    try {
+      await axios.post("http://localhost:8000/api/users/students", { name, email })
+      setName("")
+      setEmail("")
+      setShowModal(false)
+      fetchStudents()
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!window.confirm("Are you sure you want to delete this student?")) return
+    try {
+      await axios.delete(`http://localhost:8000/api/users/students/${id}`)
+      fetchStudents()
+    } catch (err) {
+      console.error("Failed to delete student:", err)
+    }
   }
 
   return (
@@ -63,46 +84,56 @@ function ManageStudents() {
           <thead>
             <tr className="border-b border-slate-100 text-left text-slate-500">
               <th className="px-6 py-3 font-medium">Student</th>
-              <th className="px-6 py-3 font-medium">Enrolled Courses</th>
               <th className="px-6 py-3 font-medium">Joined</th>
               <th className="px-6 py-3 font-medium"></th>
             </tr>
           </thead>
           <tbody>
-            {students.map((student, i) => (
-              <tr
-                key={student.email}
-                className="border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors duration-150"
-                style={{ animation: `fadeIn 0.4s ease-out ${i * 0.06}s both` }}
-              >
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-[#6366F1] text-white flex items-center justify-center text-sm font-medium">
-                      {student.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="font-medium text-slate-900">{student.name}</p>
-                      <p className="text-xs text-slate-400">{student.email}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-slate-600">{student.courses}</td>
-                <td className="px-6 py-4 text-slate-600">{student.joined}</td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-3">
-                    <button className="text-slate-400 hover:text-[#6366F1] hover:scale-110 transition-all">
-                      <Mail size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(student.email)}
-                      className="text-slate-400 hover:text-rose-500 hover:scale-110 transition-all"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
+            {students.length === 0 ? (
+              <tr>
+                <td colSpan={3} className="px-6 py-8 text-center text-slate-400">
+                  No students yet.
                 </td>
               </tr>
-            ))}
+            ) : (
+              students.map((student, i) => (
+                <tr
+                  key={student.id}
+                  className="border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors duration-150"
+                  style={{ animation: `fadeIn 0.3s ease-out ${i * 0.06}s both` }}
+                >
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-[#6366F1] text-white flex items-center justify-center text-sm font-medium">
+                        {student.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="font-medium text-slate-900">{student.name}</p>
+                        <p className="text-xs text-slate-400">{student.email}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-slate-600">
+                    {new Date(student.created_at).toLocaleDateString("en-US", {
+                      month: "short", day: "numeric", year: "numeric"
+                    })}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex items-center justify-end gap-3">
+                      <button className="text-slate-400 hover:text-[#6366F1] hover:scale-110 transition-all">
+                        <Mail size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(student.id)}
+                        className="text-slate-400 hover:text-rose-500 hover:scale-110 transition-all"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -112,10 +143,17 @@ function ManageStudents() {
           <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold text-slate-900">Add New Student</h2>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600">
+              <button onClick={() => { setShowModal(false); setError("") }} className="text-slate-400 hover:text-slate-600">
                 <X size={20} />
               </button>
             </div>
+
+            {error && (
+              <div className="mb-4 px-4 py-3 rounded-lg bg-rose-50 text-rose-600 text-sm">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1.5">Full name</label>
@@ -140,13 +178,14 @@ function ManageStudents() {
                 />
               </div>
               <p className="text-xs text-slate-400">
-                Use this for manual/offline enrollment only. Students can also self-register.
+                Default password: <strong>student123</strong> — student can change it after first login.
               </p>
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-lg font-medium text-white bg-[#6366F1] hover:opacity-90 transition-opacity"
+                disabled={loading}
+                className="w-full py-2.5 rounded-lg font-medium text-white bg-[#6366F1] hover:opacity-90 transition-opacity disabled:opacity-60"
               >
-                Create Student Account
+                {loading ? "Creating..." : "Create Student Account"}
               </button>
             </form>
           </div>

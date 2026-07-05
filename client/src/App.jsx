@@ -38,11 +38,30 @@ import AdminNotifications from "./pages/admin/AdminNotifications"
 import AdminAnalytics from "./pages/admin/AdminAnalytics"
 import AdminSettings from "./pages/admin/AdminSettings"
 import AdminProfile from "./pages/admin/AdminProfile"
+import HomePage from "./pages/HomePage"
+import AboutPage from "./pages/AboutPage"
+import CoursesPage from "./pages/CoursesPage"
+import CourseDetailPage from "./pages/CourseDetailPage"
+import TeachersPage from "./pages/TeachersPage"
+import TeacherDetailPage from "./pages/TeacherDetailPage"
+import ReviewsPage from "./pages/ReviewsPage"
+import BlogPage from "./pages/BlogPage"
+import ContactPage from "./pages/ContactPage"
+
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/courses" element={<CoursesPage />} />
+        <Route path="/courses/:id" element={<CourseDetailPage />} />
+        <Route path="/teachers" element={<TeachersPage />} />
+        <Route path="/teachers/:id" element={<TeacherDetailPage />} />
+        <Route path="/reviews" element={<ReviewsPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/student/dashboard" element={<StudentDashboard />} />
@@ -82,7 +101,7 @@ function App() {
         <Route path="/admin/analytics" element={<AdminAnalytics />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
         <Route path="/admin/profile" element={<AdminProfile />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   )

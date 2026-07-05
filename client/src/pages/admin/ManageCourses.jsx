@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import axios from "axios"
+import API from "../../api/axios"
 import AdminLayout from "../../components/AdminLayout"
 import { Search, Trash2, CheckCircle, XCircle } from "lucide-react"
 
@@ -12,7 +12,7 @@ function ManageCourses() {
 
   async function fetchCourses() {
     try {
-      const res = await axios.get("http://localhost:8000/api/courses")
+      const res = await API.get("http://localhost:8000/api/courses")
       setCourses(res.data.courses)
     } catch (err) {
       console.error("Failed to fetch courses:", err)
@@ -21,7 +21,7 @@ function ManageCourses() {
 
   async function updateStatus(id, status) {
     try {
-      await axios.patch(`http://localhost:8000/api/courses/${id}/status`, { status })
+      await API.patch(`http://localhost:8000/api/courses/${id}/status`, { status })
       fetchCourses()
     } catch (err) {
       console.error("Failed to update status:", err)
@@ -31,7 +31,7 @@ function ManageCourses() {
   async function handleDelete(id) {
     if (!window.confirm("Are you sure you want to delete this course?")) return
     try {
-      await axios.delete(`http://localhost:8000/api/courses/${id}`)
+      await API.delete(`http://localhost:8000/api/courses/${id}`)
       fetchCourses()
     } catch (err) {
       console.error("Failed to delete course:", err)

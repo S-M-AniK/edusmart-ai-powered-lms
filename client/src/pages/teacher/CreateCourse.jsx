@@ -1,16 +1,38 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
 import TeacherLayout from "../../components/TeacherLayout"
 import { Upload, DollarSign } from "lucide-react"
 
 function CreateCourse() {
+  const navigate = useNavigate()
   const [title, setTitle] = useState("")
   const [category, setCategory] = useState("")
   const [description, setDescription] = useState("")
   const [price, setPrice] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    console.log("New course:", { title, category, description, price })
+    setError("")
+    setLoading(true)
+
+    try {
+      const user = JSON.parse(localStorage.getItem("user"))
+      await axios.post("http://localhost:8000/api/courses", {
+        title,
+        description,
+        category,
+        price: parseFloat(price) || 0,
+        teacher_id: user?.id,
+      })
+      navigate("/teacher/courses")
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -22,8 +44,14 @@ function CreateCourse() {
 
       <div
         className="bg-white rounded-xl border border-slate-200 p-6 max-w-2xl"
-        style={{ animation: "fadeIn 0.6s ease-out 0.3s both" }}
+        style={{ animation: "fadeIn 0.6s ease-out 0.1s both" }}
       >
+        {error && (
+          <div className="mb-5 px-4 py-3 rounded-lg bg-rose-50 text-rose-600 text-sm">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
@@ -100,9 +128,10 @@ function CreateCourse() {
 
           <button
             type="submit"
-            className="px-6 py-2.5 rounded-lg font-medium text-white bg-[#10B981] hover:opacity-90 hover:scale-[1.03] active:scale-[0.97] transition-all"
+            disabled={loading}
+            className="px-6 py-2.5 rounded-lg font-medium text-white bg-[#10B981] hover:opacity-90 hover:scale-[1.03] active:scale-[0.97] transition-all disabled:opacity-60"
           >
-            Create Course
+            {loading ? "Creating..." : "Create Course"}
           </button>
         </form>
       </div>

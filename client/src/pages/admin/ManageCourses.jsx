@@ -1,24 +1,41 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import axios from "axios"
 import AdminLayout from "../../components/AdminLayout"
 import { Search, Trash2, CheckCircle, XCircle } from "lucide-react"
 
-const initialCourses = [
-  { name: "React for Beginners", teacher: "Sarah Khan", students: 128, status: "Published" },
-  { name: "Advanced State Management", teacher: "Sarah Khan", students: 64, status: "Published" },
-  { name: "React Native Crash Course", teacher: "Sarah Khan", students: 0, status: "Pending" },
-  { name: "UI/UX Design Basics", teacher: "Imran Hossain", students: 96, status: "Published" },
-  { name: "Python Data Science", teacher: "Nadia Islam", students: 142, status: "Pending" },
-]
-
 function ManageCourses() {
-  const [courses, setCourses] = useState(initialCourses)
+  const [courses, setCourses] = useState([])
 
-  function updateStatus(name, status) {
-    setCourses((prev) => prev.map((c) => (c.name === name ? { ...c, status } : c)))
+  useEffect(() => {
+    fetchCourses()
+  }, [])
+
+  async function fetchCourses() {
+    try {
+      const res = await axios.get("http://localhost:8000/api/courses")
+      setCourses(res.data.courses)
+    } catch (err) {
+      console.error("Failed to fetch courses:", err)
+    }
   }
 
-  function handleDelete(name) {
-    setCourses((prev) => prev.filter((c) => c.name !== name))
+  async function updateStatus(id, status) {
+    try {
+      await axios.patch(`http://localhost:8000/api/courses/${id}/status`, { status })
+      fetchCourses()
+    } catch (err) {
+      console.error("Failed to update status:", err)
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!window.confirm("Are you sure you want to delete this course?")) return
+    try {
+      await axios.delete(`http://localhost:8000/api/courses/${id}`)
+      fetchCourses()
+    } catch (err) {
+      console.error("Failed to delete course:", err)
+    }
   }
 
   return (
@@ -47,63 +64,75 @@ function ManageCourses() {
             <tr className="border-b border-slate-100 text-left text-slate-500">
               <th className="px-6 py-3 font-medium">Course</th>
               <th className="px-6 py-3 font-medium">Teacher</th>
-              <th className="px-6 py-3 font-medium">Students</th>
+              <th className="px-6 py-3 font-medium">Category</th>
+              <th className="px-6 py-3 font-medium">Price</th>
               <th className="px-6 py-3 font-medium">Status</th>
               <th className="px-6 py-3 font-medium"></th>
             </tr>
           </thead>
           <tbody>
-            {courses.map((course, i) => (
-              <tr
-                key={course.name}
-                className="border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors duration-150"
-                style={{ animation: `fadeIn 0.4s ease-out ${i * 0.06}s both` }}
-              >
-                <td className="px-6 py-4 font-medium text-slate-900">{course.name}</td>
-                <td className="px-6 py-4 text-slate-600">{course.teacher}</td>
-                <td className="px-6 py-4 text-slate-600">{course.students}</td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                      course.status === "Published"
-                        ? "bg-emerald-100 text-emerald-600"
-                        : "bg-amber-100 text-amber-600"
-                    }`}
-                  >
-                    {course.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-3">
-                    {course.status === "Pending" && (
-                      <>
-                        <button
-                          onClick={() => updateStatus(course.name, "Published")}
-                          className="text-slate-400 hover:text-emerald-500 hover:scale-110 transition-all"
-                          title="Approve"
-                        >
-                          <CheckCircle size={16} />
-                        </button>
-                        <button
-                          onClick={() => updateStatus(course.name, "Rejected")}
-                          className="text-slate-400 hover:text-amber-500 hover:scale-110 transition-all"
-                          title="Reject"
-                        >
-                          <XCircle size={16} />
-                        </button>
-                      </>
-                    )}
-                    <button
-                      onClick={() => handleDelete(course.name)}
-                      className="text-slate-400 hover:text-rose-500 hover:scale-110 transition-all"
-                      title="Delete"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
+            {courses.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="px-6 py-8 text-center text-slate-400">
+                  No courses yet.
                 </td>
               </tr>
-            ))}
+            ) : (
+              courses.map((course, i) => (
+                <tr
+                  key={course.id}
+                  className="border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors duration-150"
+                  style={{ animation: `fadeIn 0.3s ease-out ${i * 0.06}s both` }}
+                >
+                  <td className="px-6 py-4 font-medium text-slate-900">{course.title}</td>
+                  <td className="px-6 py-4 text-slate-600">{course.teacher_name || "—"}</td>
+                  <td className="px-6 py-4 text-slate-600">{course.category || "—"}</td>
+                  <td className="px-6 py-4 text-slate-600">${course.price}</td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+                        course.status === "published"
+                          ? "bg-emerald-100 text-emerald-600"
+                          : course.status === "rejected"
+                          ? "bg-rose-100 text-rose-600"
+                          : "bg-amber-100 text-amber-600"
+                      }`}
+                    >
+                      {course.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex items-center justify-end gap-3">
+                      {course.status === "pending" && (
+                        <>
+                          <button
+                            onClick={() => updateStatus(course.id, "published")}
+                            className="text-slate-400 hover:text-emerald-500 hover:scale-110 transition-all"
+                            title="Approve"
+                          >
+                            <CheckCircle size={16} />
+                          </button>
+                          <button
+                            onClick={() => updateStatus(course.id, "rejected")}
+                            className="text-slate-400 hover:text-amber-500 hover:scale-110 transition-all"
+                            title="Reject"
+                          >
+                            <XCircle size={16} />
+                          </button>
+                        </>
+                      )}
+                      <button
+                        onClick={() => handleDelete(course.id)}
+                        className="text-slate-400 hover:text-rose-500 hover:scale-110 transition-all"
+                        title="Delete"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

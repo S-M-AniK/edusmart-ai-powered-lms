@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import API from "../../api/axios"
+import toast from "react-hot-toast"
 import AdminLayout from "../../components/AdminLayout"
 import { Search, Trash2, CheckCircle, XCircle } from "lucide-react"
 
@@ -22,6 +23,7 @@ function ManageCourses() {
   async function updateStatus(id, status) {
     try {
       await API.patch(`http://localhost:8000/api/courses/${id}/status`, { status })
+      toast.success(`Course ${status} successfully!`)
       fetchCourses()
     } catch (err) {
       console.error("Failed to update status:", err)
@@ -32,6 +34,7 @@ function ManageCourses() {
     if (!window.confirm("Are you sure you want to delete this course?")) return
     try {
       await API.delete(`http://localhost:8000/api/courses/${id}`)
+      toast.success("Course deleted!")
       fetchCourses()
     } catch (err) {
       console.error("Failed to delete course:", err)

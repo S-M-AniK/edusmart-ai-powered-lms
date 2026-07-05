@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import AdminLayout from "../../components/AdminLayout"
 import { Plus, Trash2, X } from "lucide-react"
 import { getAllBlogs, createBlog, deleteBlog, updateBlog } from "../../api/blogs"
+import toast from "react-hot-toast"
 
 function ManageBlogs() {
   const [blogs, setBlogs] = useState([])
@@ -30,6 +31,7 @@ function ManageBlogs() {
       await createBlog({ ...form, author_id: 1 })
       setForm({ title: "", content: "" })
       setShowModal(false)
+      toast.success("Blog created!")
       fetchBlogs()
     } catch (err) {
       console.error("Failed to create blog:", err)
@@ -39,6 +41,7 @@ function ManageBlogs() {
   async function handlePublish(id, published) {
     try {
       await updateBlog(id, { published: !published })
+      toast.success(published ? "Blog unpublished!" : "Blog published!")
       fetchBlogs()
     } catch (err) {
       console.error("Failed to update blog:", err)
@@ -49,6 +52,7 @@ function ManageBlogs() {
     if (!window.confirm("Delete this blog?")) return
     try {
       await deleteBlog(id)
+      toast.success("Blog deleted!")
       fetchBlogs()
     } catch (err) {
       console.error("Failed to delete blog:", err)

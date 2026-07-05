@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import AdminLayout from "../../components/AdminLayout"
 import { Star, Trash2, CheckCircle } from "lucide-react"
 import { getAllReviews, approveReview, deleteReview } from "../../api/reviews"
+import toast from "react-hot-toast"
 
 function ManageReviews() {
   const [reviews, setReviews] = useState([])
@@ -25,6 +26,7 @@ function ManageReviews() {
   async function handleApprove(id) {
     try {
       await approveReview(id, true)
+      toast.success("Review approved!")
       fetchReviews()
     } catch (err) {
       console.error("Failed to approve review:", err)
@@ -35,6 +37,7 @@ function ManageReviews() {
     if (!window.confirm("Delete this review?")) return
     try {
       await deleteReview(id)
+      toast.success("Review deleted!")
       fetchReviews()
     } catch (err) {
       console.error("Failed to delete review:", err)

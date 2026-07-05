@@ -3,6 +3,7 @@ import DashboardLayout from "../../components/DashboardLayout"
 import { Heart, Star, ShoppingCart } from "lucide-react"
 import { getStudentWishlist, removeFromWishlist } from "../../api/wishlist"
 import { enrollCourse } from "../../api/enrollments"
+import toast from "react-hot-toast"
 
 const gradients = ["from-indigo-400 to-indigo-600", "from-sky-400 to-sky-600", "from-rose-400 to-rose-600", "from-emerald-400 to-emerald-600", "from-amber-400 to-amber-600"]
 
@@ -24,6 +25,7 @@ function Wishlist() {
   async function handleRemove(course_id) {
     try {
       await removeFromWishlist(user.id, course_id)
+      toast.success("Removed from wishlist!")
       setWishlist(prev => prev.filter(w => w.course_id !== course_id))
     } catch (err) {
       console.error("Failed to remove from wishlist:", err)
@@ -33,10 +35,10 @@ function Wishlist() {
   async function handleEnroll(course_id) {
     try {
       await enrollCourse({ student_id: user.id, course_id })
-      alert("Enrolled successfully!")
+     toast.success("Enrolled successfully!")
       handleRemove(course_id)
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to enroll!")
+      toast.error(err.response?.data?.message || "Failed to enroll!")
     }
   }
 

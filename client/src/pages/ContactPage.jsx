@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { createContact } from "../api/contacts"
+import toast from "react-hot-toast"
 
 function useInView(threshold = 0.1) {
   const ref = useRef(null)
@@ -35,9 +36,10 @@ export default function ContactPage() {
     try {
       await createContact(form)
       setSuccess(true)
+      toast.success("Message sent successfully!")
       setForm({ name: "", email: "", subject: "", message: "" })
     } catch {
-      alert("Something went wrong!")
+      toast.error("Something went wrong!")
     }
     setLoading(false)
   }

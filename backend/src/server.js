@@ -11,6 +11,7 @@ import wishlistRoutes from "./routes/wishlist.routes.js"
 import blogRoutes from "./routes/blog.routes.js"
 import contactRoutes from "./routes/contact.routes.js"
 import analyticsRoutes from "./routes/analytics.routes.js"
+import chatRoutes from "./routes/chat.routes.js"
 
 dotenv.config()
 
@@ -35,6 +36,7 @@ app.use("/api/wishlist", wishlistRoutes)
 app.use("/api/blogs", blogRoutes)
 app.use("/api/contacts", contactRoutes)
 app.use("/api/analytics", analyticsRoutes)
+app.use("/api/chat", chatRoutes)
 
 const PORT = process.env.PORT || 8000
 

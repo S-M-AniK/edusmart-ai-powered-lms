@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import pool from "../config/db.js"
+import { sendWelcomeEmail } from "../utils/email.js"
 
 export async function register(req, res) {
   try {
@@ -22,6 +23,8 @@ export async function register(req, res) {
       "INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id, name, email, role, created_at",
       [name, email, hashedPassword, role || "student"]
     )
+
+    sendWelcomeEmail(email, name).catch(err => console.error("Welcome email error:", err))
 
     res.status(201).json({ success: true, user: result.rows[0] })
   } catch (err) {

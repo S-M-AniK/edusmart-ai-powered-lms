@@ -1,4 +1,5 @@
 import pool from "../config/db.js"
+import { sendCourseApprovedEmail } from "../utils/email.js"
 
 export async function getCourses(req, res) {
   try {
@@ -8,6 +9,15 @@ export async function getCourses(req, res) {
        LEFT JOIN users u ON c.teacher_id = u.id
        ORDER BY c.created_at DESC`
     )
+    if (status === "published") {
+  const teacherRes = await pool.query(
+    "SELECT u.name, u.email FROM users u JOIN courses c ON c.teacher_id = u.id WHERE c.id = $1",
+    [id]
+  )
+  if (teacherRes.rows[0]) {
+    sendCourseApprovedEmail(teacherRes.rows[0].email, teacherRes.rows[0].name, result.rows[0].title).catch(err => console.error("Course approval email error:", err))
+  }
+}
     res.json({ success: true, courses: result.rows })
   } catch (err) {
     console.error("Get courses error:", err)

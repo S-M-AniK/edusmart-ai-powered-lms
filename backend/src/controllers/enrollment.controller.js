@@ -1,4 +1,5 @@
 import pool from "../config/db.js"
+import { sendEnrollmentEmail } from "../utils/email.js"
 
 export async function enrollCourse(req, res) {
   try {
@@ -25,7 +26,11 @@ export async function enrollCourse(req, res) {
       "INSERT INTO enrollments (student_id, course_id) VALUES ($1, $2) RETURNING *",
       [student_id, course_id]
     )
-
+    const studentRes = await pool.query("SELECT name, email FROM users WHERE id = $1", [student_id])
+    const courseRes = await pool.query("SELECT title FROM courses WHERE id = $1", [course_id])
+        if (studentRes.rows[0] && courseRes.rows[0]) {
+    sendEnrollmentEmail(studentRes.rows[0].email, studentRes.rows[0].name, courseRes.rows[0].title).catch(err => console.error("Enrollment email error:", err))
+}
     res.status(201).json({ success: true, enrollment: result.rows[0] })
   } catch (err) {
     console.error("Enroll error:", err)

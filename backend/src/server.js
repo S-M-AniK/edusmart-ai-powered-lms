@@ -12,6 +12,7 @@ import blogRoutes from "./routes/blog.routes.js"
 import contactRoutes from "./routes/contact.routes.js"
 import analyticsRoutes from "./routes/analytics.routes.js"
 import chatRoutes from "./routes/chat.routes.js"
+import certificateRoutes from "./routes/certificate.routes.js"
 
 dotenv.config()
 
@@ -37,6 +38,7 @@ app.use("/api/blogs", blogRoutes)
 app.use("/api/contacts", contactRoutes)
 app.use("/api/analytics", analyticsRoutes)
 app.use("/api/chat", chatRoutes)
+app.use("/api/certificates", certificateRoutes)
 
 const PORT = process.env.PORT || 8000
 

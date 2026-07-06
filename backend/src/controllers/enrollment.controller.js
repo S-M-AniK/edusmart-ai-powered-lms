@@ -9,9 +9,9 @@ export async function enrollCourse(req, res) {
       return res.status(400).json({ success: false, message: "Student ID and Course ID required" })
     }
 
-    const courseCheck = await pool.query("SELECT * FROM courses WHERE id = $1 AND status = 'approved'", [course_id])
+    const courseCheck = await pool.query("SELECT * FROM courses WHERE id = $1 AND status = 'published'", [course_id])
     if (courseCheck.rows.length === 0) {
-      return res.status(404).json({ success: false, message: "Course not found or not approved" })
+      return res.status(404).json({ success: false, message: "Course not found or not published" })
     }
 
     const existing = await pool.query(

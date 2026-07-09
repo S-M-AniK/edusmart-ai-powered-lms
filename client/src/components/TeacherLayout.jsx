@@ -2,7 +2,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import {
   LayoutDashboard,
   BookOpen,
-  PlusCircle,
   ListTree,
   Users,
   BarChart3,
@@ -18,7 +17,6 @@ import {
 const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/teacher/dashboard" },
   { label: "My Courses", icon: BookOpen, path: "/teacher/courses" },
-  { label: "Create Course", icon: PlusCircle, path: "/teacher/courses/create" },
   { label: "Curriculum Manager", icon: ListTree, path: "/teacher/curriculum" },
   { label: "Students", icon: Users, path: "/teacher/students" },
   { label: "Analytics", icon: BarChart3, path: "/teacher/analytics" },

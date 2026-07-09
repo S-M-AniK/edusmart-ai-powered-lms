@@ -25,7 +25,7 @@ function RecommendedCourses() {
             key={course.name}
             className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-md transition-shadow"
           >
-            <div className={`h-32 bg-gradient-to-br ${course.image}`}></div>
+            <div className={`h-32 bg-linear-to-br ${course.image}`}></div>
             <div className="p-5">
               <span className="inline-block text-xs font-medium text-[#6366F1] bg-[#6366F1]/10 px-2 py-1 rounded-full mb-2">
                 {course.reason}

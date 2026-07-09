@@ -175,9 +175,6 @@ function ManageTeachers() {
                   className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
                 />
               </div>
-              <p className="text-xs text-slate-400">
-                Default password: <strong>teacher123</strong> — teacher can change it after first login.
-              </p>
               <button
                 type="submit"
                 disabled={loading}

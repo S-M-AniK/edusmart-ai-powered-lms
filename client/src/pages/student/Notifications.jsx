@@ -25,7 +25,7 @@ function Notifications() {
           return (
             <div key={i} className="flex items-start gap-4 p-5">
               <div
-                className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
                   notif.unread ? "bg-[#6366F1]/10" : "bg-slate-100"
                 }`}
               >

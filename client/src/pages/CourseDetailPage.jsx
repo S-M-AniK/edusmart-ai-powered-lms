@@ -1,10 +1,30 @@
 import { useState, useEffect } from "react"
 import { Link, useParams } from "react-router-dom"
 import { getCourseById } from "../api/courses"
+import { enrollCourse } from "../api/enrollments"
+import toast from "react-hot-toast"
 import { getCourseReviews } from "../api/reviews"
+
 
 export default function CourseDetailPage() {
   const { id } = useParams()
+  const [enrolling, setEnrolling] = useState(false)
+const user = JSON.parse(localStorage.getItem("user") || "null")
+
+async function handleEnroll() {
+  if (!user) {
+    window.location.href = "/login"
+    return
+  }
+  setEnrolling(true)
+  try {
+    await enrollCourse({ student_id: user.id, course_id: parseInt(id) })
+    toast.success("Enrolled successfully!")
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to enroll!")
+  }
+  setEnrolling(false)
+}
   const [course, setCourse] = useState(null)
   const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(true)
@@ -27,8 +47,21 @@ export default function CourseDetailPage() {
           ))}
         </div>
         <div style={{ display: "flex", gap: "12px" }}>
-          <Link to="/login" style={{ padding: "8px 20px", border: "2px solid #6c63ff", borderRadius: "8px", color: "#6c63ff", textDecoration: "none", fontWeight: "600" }}>Login</Link>
-          <Link to="/register" style={{ padding: "8px 20px", background: "#6c63ff", borderRadius: "8px", color: "#fff", textDecoration: "none", fontWeight: "600" }}>Sign Up</Link>
+          {user ? (
+  <button onClick={handleEnroll} disabled={enrolling}
+    style={{ display: "block", width: "100%", padding: "16px", background: "#6c63ff", color: "#fff", borderRadius: "10px", border: "none", fontWeight: "700", fontSize: "16px", cursor: "pointer", marginBottom: "12px" }}>
+    {enrolling ? "Enrolling..." : "Enroll Now"}
+  </button>
+) : (
+  <>
+    <Link to="/register" style={{ display: "block", padding: "16px", background: "#6c63ff", color: "#fff", borderRadius: "10px", textDecoration: "none", fontWeight: "700", fontSize: "16px", textAlign: "center", marginBottom: "12px" }}>
+      Enroll Now
+    </Link>
+    <Link to="/login" style={{ display: "block", padding: "16px", border: "2px solid #6c63ff", color: "#6c63ff", borderRadius: "10px", textDecoration: "none", fontWeight: "700", fontSize: "16px", textAlign: "center" }}>
+      Login to Enroll
+    </Link>
+  </>
+)}
         </div>
       </nav>
 

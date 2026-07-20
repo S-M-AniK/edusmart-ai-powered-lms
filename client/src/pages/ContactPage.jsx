@@ -99,13 +99,13 @@ export default function ContactPage() {
         <AnimatedSection className="animate-fadeInRight">
           <h2 style={{ fontSize: "28px", fontWeight: "700", marginBottom: "32px" }}>Get In Touch</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-            {[["📧", "Email", "support@edusmart.com"], ["📞", "Phone", "+880 1234 567890"], ["📍", "Address", "Dhaka, Bangladesh"], ["⏰", "Working Hours", "Mon - Fri: 9AM - 6PM"]].map(([icon, label, value], i) => (
+            {[["📧", "Email", "support@edusmart.com"], ["📞", "Phone", "+880 1234 567890"], ["📍", "Address", "Dhaka, Bangladesh"], ["⏰", "Working Hours", "Sun - Thurs: 9AM - 6PM"]].map(([icon, label, value], i) => (
               <div key={label} className={`animate-fadeInRight delay-${i + 1}`} style={{ display: "flex", gap: "16px", alignItems: "flex-start", background: "#f8f9ff", padding: "20px", borderRadius: "12px" }}>
                 <div className="animate-float" style={{ fontSize: "32px" }}>{icon}</div>
                 <div>
                   <div style={{ fontWeight: "700", marginBottom: "4px" }}>{label}</div>
                   <div style={{ color: "#666" }}>{value}</div>
-                </div>
+                </div>  
               </div>
             ))}
           </div>

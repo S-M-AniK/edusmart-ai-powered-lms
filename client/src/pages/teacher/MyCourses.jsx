@@ -102,9 +102,10 @@ function MyCourses() {
                     <Trash2 size={14} />
                     Delete
                   </button>
-                  <button className="flex-1 py-2 rounded-lg font-medium text-[#10B981] border border-[#10B981] hover:bg-[#10B981] hover:text-white transition-all duration-200 text-sm">
-                    Manage
-                  </button>
+                  <Link to={`/teacher/courses/edit/${course.id}`}
+                       className="flex-1 py-2 rounded-lg font-medium text-center text-[#10B981] border border-[#10B981] hover:bg-[#10B981] hover:text-white transition-all duration-200 text-sm">
+                       Manage
+                  </Link>
                 </div>
               </div>
             </div>

@@ -72,26 +72,44 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section style={{ background: "linear-gradient(135deg, #6c63ff 0%, #3b37d4 100%)", color: "#fff", padding: "100px 60px", textAlign: "center", overflow: "hidden" }}>
-        <h1 className="animate-fadeInUp" style={{ fontSize: "56px", fontWeight: "800", marginBottom: "20px", lineHeight: 1.2 }}>
-          Learn Smarter with <br /><span style={{ color: "#ffd700" }}>AI-Powered</span> Education
-        </h1>
-        <p className="animate-fadeInUp delay-2" style={{ fontSize: "20px", marginBottom: "40px", opacity: 0.9 }}>
-          Join thousands of students learning from expert teachers with personalized AI assistance.
-        </p>
-        <div className="animate-fadeInUp delay-3" style={{ display: "flex", gap: "16px", justifyContent: "center" }}>
-          <Link to="/courses" className="btn-hover" style={{ padding: "16px 40px", background: "#ffd700", color: "#1a1a2e", borderRadius: "12px", textDecoration: "none", fontWeight: "700", fontSize: "18px" }}>Explore Courses</Link>
-          <Link to="/register" className="btn-hover" style={{ padding: "16px 40px", background: "rgba(255,255,255,0.2)", color: "#fff", borderRadius: "12px", textDecoration: "none", fontWeight: "700", fontSize: "18px", border: "2px solid rgba(255,255,255,0.5)" }}>Get Started Free</Link>
-        </div>
-        <div className="animate-fadeInUp delay-4" style={{ display: "flex", gap: "60px", justifyContent: "center", marginTop: "60px" }}>
-          {[["10,000+", "Students"], ["500+", "Courses"], ["100+", "Teachers"], ["95%", "Satisfaction"]].map(([num, label], i) => (
-            <div key={label} className={`animate-scaleIn delay-${i + 3}`}>
-              <div style={{ fontSize: "36px", fontWeight: "800" }}>{num}</div>
-              <div style={{ fontSize: "14px", opacity: 0.8 }}>{label}</div>
+    {/* Featured Courses */}
+<section style={{ padding: "80px 60px", textAlign: "center" }}>
+  <AnimatedSection>
+    <h2 style={{ fontSize: "36px", fontWeight: "700", marginBottom: "12px" }}>Featured Courses</h2>
+    <p style={{ color: "#666", marginBottom: "48px" }}>Learn from our most popular courses</p>
+  </AnimatedSection>
+  <div style={{ position: "relative", maxWidth: "1100px", margin: "0 auto", padding: "0 60px" }}>
+    <button onClick={() => {
+      document.getElementById('course-slider').scrollBy({ left: -320, behavior: 'smooth' })
+    }} style={{ position: "absolute", left: "-0px", top: "50%", transform: "translateY(-50%)", zIndex: 10, width: "44px", height: "44px", borderRadius: "50%", background: "#6c63ff", color: "#fff", border: "none", cursor: "pointer", fontSize: "18px", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(108,99,255,0.3)" }}>‹</button>
+    <div id="course-slider" style={{ display: "flex", gap: "24px", overflowX: "hidden", scrollBehavior: "smooth", padding: "10px 4px 20px 4px" }}>
+      {courses.length > 0 ? courses.map((course, i) => (
+        <Link to={`/courses/${course.id}`} key={course.id} className="card-hover" style={{ background: "#fff", borderRadius: "2px solid #6c63ff", textDecoration: "none", color: "#6c63ff", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", overflow: "hidden", display: "block", minWidth: "300px", maxWidth: "300px" }}>
+          <div style={{ height: "160px", background: "linear-gradient(135deg, #6c63ff, #3b37d4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span className="animate-float" style={{ fontSize: "48px" }}>📚</span>
+          </div>
+          <div style={{ padding: "20px", textAlign: "left" }}>
+            <div style={{ fontSize: "12px", color: "#6c63ff", fontWeight: "600", marginBottom: "8px" }}>{course.category}</div>
+            <div style={{ fontWeight: "700", fontSize: "16px", marginBottom: "8px" }}>{course.title}</div>
+            <div style={{ fontSize: "13px", color: "#888", marginBottom: "12px" }}>by {course.teacher_name}</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ color: "#f59e0b" }}>⭐ 4.5</span>
+              <span style={{ fontWeight: "700", color: "#6c63ff" }}>৳{course.price}</span>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        </Link>
+      )) : (
+        <div style={{ color: "#888", padding: "40px", width: "100%" }}>No courses available yet</div>
+      )}
+    </div>
+    <button onClick={() => {
+      document.getElementById('course-slider').scrollBy({ left: 320, behavior: 'smooth' })
+    }} style={{ position: "absolute", right: "-0px", top: "50%", transform: "translateY(-50%)", zIndex: 10, width: "44px", height: "44px", borderRadius: "50%", background: "#6c63ff", color: "#fff", border: "none", cursor: "pointer", fontSize: "18px", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(108,99,255,0.3)" }}>›</button>
+  </div>
+  <AnimatedSection>
+    <Link to="/courses" className="btn-hover" style={{ display: "inline-block", marginTop: "40px", padding: "14px 36px", background: "#6c63ff", color: "#fff", borderRadius: "10px", textDecoration: "none", fontWeight: "600" }}>View All Courses</Link>
+  </AnimatedSection>
+</section>
 
       {/* Categories */}
       <section style={{ padding: "80px 60px", background: "#f8f9ff", textAlign: "center" }}>

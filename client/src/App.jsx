@@ -25,6 +25,7 @@ import Support from "./pages/student/Support"
 import TeacherDashboard from "./pages/teacher/TeacherDashboard"
 import TeacherMyCourses from "./pages/teacher/MyCourses"
 import CreateCourse from "./pages/teacher/CreateCourse"
+import EditCourse from "./pages/teacher/EditCourse"
 import Students from "./pages/teacher/Students"
 import CurriculumManager from "./pages/teacher/CurriculumManager"
 import Analytics from "./pages/teacher/Analytics"
@@ -80,6 +81,7 @@ function App() {
         <Route path="/teacher/dashboard" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherDashboard /></ProtectedRoute>} />
         <Route path="/teacher/courses" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherMyCourses /></ProtectedRoute>} />
         <Route path="/teacher/courses/create" element={<ProtectedRoute allowedRoles={["teacher"]}><CreateCourse /></ProtectedRoute>} />
+        <Route path="/teacher/courses/edit/:id" element={<ProtectedRoute allowedRoles={["teacher"]}><EditCourse /></ProtectedRoute>} />
         <Route path="/teacher/students" element={<ProtectedRoute allowedRoles={["teacher"]}><Students /></ProtectedRoute>} />
         <Route path="/teacher/curriculum" element={<ProtectedRoute allowedRoles={["teacher"]}><CurriculumManager /></ProtectedRoute>} />
         <Route path="/teacher/analytics" element={<ProtectedRoute allowedRoles={["teacher"]}><Analytics /></ProtectedRoute>} />

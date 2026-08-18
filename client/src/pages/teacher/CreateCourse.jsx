@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import TeacherLayout from "../../components/TeacherLayout"
-import { Upload, DollarSign } from "lucide-react"
+import { DollarSign } from "lucide-react"
 import API from "../../api/axios"
 import toast from "react-hot-toast"
 
 function CreateCourse() {
   const navigate = useNavigate()
- const [form, setForm] = useState({ title: "", category: "", description: "", price: "", what_you_learn: "", requirements: "", duration: "" })
+  const [form, setForm] = useState({ title: "", category: "", description: "", price: "", what_you_learn: "", requirements: "", duration: "", thumbnail: "" })
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState([])
@@ -43,6 +43,7 @@ function CreateCourse() {
         what_you_learn: form.what_you_learn,
         requirements: form.requirements,
         duration: form.duration,
+        thumbnail: form.thumbnail,
       })
       toast.success("Course created successfully!")
       navigate("/teacher/courses")
@@ -116,32 +117,36 @@ function CreateCourse() {
           </div>
 
           <div>
-  <label className="block text-sm font-medium mb-1.5">What You'll Learn</label>
-  <textarea value={form.what_you_learn} onChange={e => handleChange("what_you_learn", e.target.value)}
-    rows={3} placeholder="e.g. Build React apps, Understand hooks..."
-    className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] resize-none transition-shadow" />
-</div>
-
-<div>
-  <label className="block text-sm font-medium mb-1.5">Requirements</label>
-  <textarea value={form.requirements} onChange={e => handleChange("requirements", e.target.value)}
-    rows={3} placeholder="e.g. Basic HTML/CSS knowledge..."
-    className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] resize-none transition-shadow" />
-</div>
-
-<div>
-  <label className="block text-sm font-medium mb-1.5">Duration</label>
-  <input type="text" value={form.duration} onChange={e => handleChange("duration", e.target.value)}
-    placeholder="e.g. 10 hours, 4 weeks..."
-    className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] transition-shadow" />
-</div>
+            <label className="block text-sm font-medium mb-1.5">What You'll Learn</label>
+            <textarea value={form.what_you_learn} onChange={e => handleChange("what_you_learn", e.target.value)}
+              rows={3} placeholder="e.g. Build React apps, Understand hooks..."
+              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] resize-none transition-shadow" />
+          </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Course Thumbnail</label>
-            <div className="border-2 border-dashed border-slate-200 rounded-lg p-8 text-center hover:border-[#10B981] hover:bg-[#10B981]/5 transition-all duration-300 cursor-pointer">
-              <Upload size={28} className="text-slate-400 mx-auto mb-2" />
-              <p className="text-sm text-slate-500">Click to upload or drag and drop</p>
-            </div>
+            <label className="block text-sm font-medium mb-1.5">Requirements</label>
+            <textarea value={form.requirements} onChange={e => handleChange("requirements", e.target.value)}
+              rows={3} placeholder="e.g. Basic HTML/CSS knowledge..."
+              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] resize-none transition-shadow" />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Duration</label>
+            <input type="text" value={form.duration} onChange={e => handleChange("duration", e.target.value)}
+              placeholder="e.g. 10 hours, 4 weeks..."
+              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] transition-shadow" />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Course Thumbnail URL</label>
+            <input type="url" value={form.thumbnail || ""} onChange={e => handleChange("thumbnail", e.target.value)}
+              placeholder="https://example.com/image.jpg"
+              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] transition-shadow" />
+            {form.thumbnail && (
+              <img src={form.thumbnail} alt="Thumbnail preview"
+                style={{ marginTop: "12px", width: "100%", height: "160px", objectFit: "cover", borderRadius: "10px" }}
+                onError={e => e.target.style.display = "none"} />
+            )}
           </div>
 
           <button type="submit" disabled={loading}

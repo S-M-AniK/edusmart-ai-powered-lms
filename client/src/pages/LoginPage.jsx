@@ -6,14 +6,15 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react"
 function LoginPage() {
   const navigate = useNavigate()
   useEffect(() => {
-  const user = JSON.parse(localStorage.getItem("user") || "null")
-  const token = localStorage.getItem("token")
-  if (user && token) {
-    if (user.role === "admin") navigate("/admin/dashboard")
-    else if (user.role === "teacher") navigate("/teacher/dashboard")
-    else navigate("/student/dashboard")
-  }
-}, [])
+    const user = JSON.parse(localStorage.getItem("user") || "null")
+    const token = localStorage.getItem("token")
+    if (user && token) {
+      if (user.role === "admin") navigate("/admin/dashboard")
+      else if (user.role === "teacher") navigate("/teacher/dashboard")
+      else navigate("/student/dashboard")
+    }
+  }, [])
+
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -31,29 +32,18 @@ function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault()
     setError("")
-
     const errors = validate()
     setFieldErrors(errors)
     if (Object.keys(errors).length > 0) return
-
     setLoading(true)
     try {
-      const res = await axios.post("http://localhost:8000/api/auth/login", {
-        email,
-        password,
-      })
-
+      const res = await axios.post("http://localhost:8000/api/auth/login", { email, password })
       localStorage.setItem("token", res.data.token)
       localStorage.setItem("user", JSON.stringify(res.data.user))
-
       const role = res.data.user.role
-      if (role === "teacher") {
-        navigate("/teacher/dashboard")
-      } else if (role === "admin") {
-        navigate("/admin/dashboard")
-      } else {
-        navigate("/student/dashboard")
-      }
+      if (role === "teacher") navigate("/teacher/dashboard")
+      else if (role === "admin") navigate("/admin/dashboard")
+      else navigate("/student/dashboard")
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong. Please try again.")
     } finally {
@@ -67,14 +57,18 @@ function LoginPage() {
 
   return (
     <div className="min-h-screen flex bg-[#FAFAF8]">
-      <div className="hidden lg:flex lg:w-1/2 bg-[#1E1B4B] text-white flex-col justify-between p-12 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 text-white flex-col justify-between p-12 relative overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&q=80"
+          alt="bg"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[#1E1B4B] opacity-80"></div>
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-20 blur-3xl bg-[#6366F1]"></div>
 
         <div className="relative z-10">
           <div className="flex items-center gap-2 text-xl font-semibold">
-            <span className="w-9 h-9 rounded-lg bg-white text-[#1E1B4B] flex items-center justify-center font-bold">
-              E
-            </span>
+            <span className="w-9 h-9 rounded-lg bg-white text-[#1E1B4B] flex items-center justify-center font-bold">E</span>
             EduSmart
           </div>
         </div>
@@ -84,8 +78,7 @@ function LoginPage() {
             Learning, organized around the people who do it.
           </h1>
           <p className="text-white/60 text-base leading-relaxed">
-            One platform for students, teachers, and administrators to manage
-            courses, track progress, and stay connected.
+            One platform for students, teachers, and administrators to manage courses, track progress, and stay connected.
           </p>
         </div>
 
@@ -97,9 +90,7 @@ function LoginPage() {
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-md">
           <div className="lg:hidden flex items-center gap-2 text-xl font-semibold text-[#1E1B4B] mb-8">
-            <span className="w-9 h-9 rounded-lg bg-[#1E1B4B] text-white flex items-center justify-center font-bold">
-              E
-            </span>
+            <span className="w-9 h-9 rounded-lg bg-[#1E1B4B] text-white flex items-center justify-center font-bold">E</span>
             EduSmart
           </div>
 
@@ -107,9 +98,7 @@ function LoginPage() {
           <p className="text-slate-500 mb-8">Sign in to continue to your dashboard.</p>
 
           {error && (
-            <div className="mb-5 px-4 py-3 rounded-lg bg-rose-50 text-rose-600 text-sm">
-              {error}
-            </div>
+            <div className="mb-5 px-4 py-3 rounded-lg bg-rose-50 text-rose-600 text-sm">{error}</div>
           )}
 
           <form onSubmit={handleSubmit} noValidate className="space-y-5">
@@ -127,9 +116,7 @@ function LoginPage() {
                   className="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#6366F1] transition-shadow"
                 />
               </div>
-              {fieldErrors.email && (
-                <p className="text-sm text-rose-500 mt-1.5">{fieldErrors.email}</p>
-              )}
+              {fieldErrors.email && <p className="text-sm text-rose-500 mt-1.5">{fieldErrors.email}</p>}
             </div>
 
             <div>
@@ -137,9 +124,7 @@ function LoginPage() {
                 <label className={labelClass("password").replace("mb-1.5", "")}>
                   Password {fieldErrors.password && <span className="text-rose-500">*</span>}
                 </label>
-                <a href="#" className="text-sm font-medium text-[#6366F1]">
-                  Forgot password?
-                </a>
+                <a href="#" className="text-sm font-medium text-[#6366F1]">Forgot password?</a>
               </div>
               <div className="relative">
                 <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -158,9 +143,7 @@ function LoginPage() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {fieldErrors.password && (
-                <p className="text-sm text-rose-500 mt-1.5">{fieldErrors.password}</p>
-              )}
+              {fieldErrors.password && <p className="text-sm text-rose-500 mt-1.5">{fieldErrors.password}</p>}
             </div>
 
             <button
@@ -174,9 +157,7 @@ function LoginPage() {
 
           <p className="text-center text-sm text-slate-500 mt-8">
             Don't have an account?{" "}
-            <a href="/register" className="font-medium text-slate-900 hover:underline">
-              Create one
-            </a>
+            <a href="/register" className="font-medium text-slate-900 hover:underline">Create one</a>
           </p>
         </div>
       </div>

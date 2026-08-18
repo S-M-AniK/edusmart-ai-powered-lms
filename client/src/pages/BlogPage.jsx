@@ -67,14 +67,19 @@ export default function BlogPage() {
             {blogs.map((blog, i) => (
               <AnimatedSection key={blog.id} className={`delay-${(i % 3) + 1}`}>
                 <div className="card-hover" style={{ background: "#fff", borderRadius: "16px", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", overflow: "hidden" }}>
-                  <div style={{ height: "180px", background: "linear-gradient(135deg, #f093fb, #f5576c)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <span className="animate-float" style={{ fontSize: "56px" }}>📝</span>
+                  <div style={{ height: "200px", overflow: "hidden", position: "relative" }}>
+                    {blog.cover_image ? (
+                      <img src={blog.cover_image} alt={blog.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                      <div style={{ height: "100%", background: "linear-gradient(135deg, #f093fb, #f5576c)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <span className="animate-float" style={{ fontSize: "56px" }}>📝</span>
+                      </div>
+                    )}
                   </div>
                   <div style={{ padding: "24px" }}>
-                    <div style={{ fontWeight: "700", fontSize: "18px", marginBottom: "8px" }}>{blog.title}</div>
-                    <div style={{ fontSize: "13px", color: "#888", marginBottom: "16px" }}>by {blog.author_name}</div>
+                    <div style={{ fontWeight: "700", fontSize: "18px", marginBottom: "12px" }}>{blog.title}</div>
                     <p style={{ color: "#666", fontSize: "14px", lineHeight: 1.6, marginBottom: "16px" }}>{blog.content?.substring(0, 100)}...</p>
-                    <button className="btn-hover" style={{ padding: "10px 20px", background: "#6c63ff", color: "#fff", borderRadius: "8px", border: "none", fontWeight: "600", cursor: "pointer" }}>Read More</button>
+                    <Link to={`/blog/${blog.id}`} style={{ display: "inline-block", padding: "10px 20px", background: "#6c63ff", color: "#fff", borderRadius: "8px", textDecoration: "none", fontWeight: "600" }}>Read More</Link>
                   </div>
                 </div>
               </AnimatedSection>

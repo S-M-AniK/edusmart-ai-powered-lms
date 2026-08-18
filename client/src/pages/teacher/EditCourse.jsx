@@ -8,7 +8,7 @@ import toast from "react-hot-toast"
 function EditCourse() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [form, setForm] = useState({ title: "", category: "", description: "", price: "", what_you_learn: "", requirements: "", duration: "" })
+  const [form, setForm] = useState({ title: "", category: "", description: "", price: "", what_you_learn: "", requirements: "", duration: "", thumbnail: "" })
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
@@ -26,6 +26,7 @@ function EditCourse() {
         what_you_learn: c.what_you_learn || "",
         requirements: c.requirements || "",
         duration: c.duration || "",
+        thumbnail: c.thumbnail || "",
       })
       setFetching(false)
     }).catch(() => setFetching(false))
@@ -56,6 +57,7 @@ function EditCourse() {
         what_you_learn: form.what_you_learn,
         requirements: form.requirements,
         duration: form.duration,
+        thumbnail: form.thumbnail,
       })
       toast.success("Course updated successfully!")
       navigate("/teacher/courses")
@@ -152,6 +154,18 @@ function EditCourse() {
             <input type="text" value={form.duration} onChange={e => handleChange("duration", e.target.value)}
               placeholder="e.g. 10 hours, 4 weeks..."
               className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] transition-shadow" />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Course Thumbnail URL</label>
+            <input type="url" value={form.thumbnail || ""} onChange={e => handleChange("thumbnail", e.target.value)}
+              placeholder="https://example.com/image.jpg"
+              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#10B981] transition-shadow" />
+            {form.thumbnail && (
+              <img src={form.thumbnail} alt="Thumbnail preview"
+                style={{ marginTop: "12px", width: "100%", height: "160px", objectFit: "cover", borderRadius: "10px" }}
+                onError={e => e.target.style.display = "none"} />
+            )}
           </div>
 
           <div className="flex gap-3">

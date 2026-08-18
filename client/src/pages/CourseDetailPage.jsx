@@ -105,9 +105,15 @@ export default function CourseDetailPage() {
 
         <div style={{ position: "sticky", top: "90px", height: "fit-content" }}>
           <div style={{ background: "#fff", borderRadius: "16px", boxShadow: "0 8px 40px rgba(0,0,0,0.12)", overflow: "hidden" }}>
-            <div style={{ height: "180px", background: "linear-gradient(135deg, #6c63ff, #3b37d4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ fontSize: "64px" }}>📚</span>
-            </div>
+            <div style={{ height: "180px", overflow: "hidden" }}>
+  {course.thumbnail ? (
+    <img src={course.thumbnail} alt={course.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+  ) : (
+    <div style={{ height: "100%", background: "linear-gradient(135deg, #6c63ff, #3b37d4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <span style={{ fontSize: "64px" }}>📚</span>
+    </div>
+  )}
+</div>
             <div style={{ padding: "24px" }}>
               <div style={{ fontSize: "36px", fontWeight: "800", color: "#6c63ff", marginBottom: "20px" }}>৳{course.price}</div>
               {user ? (

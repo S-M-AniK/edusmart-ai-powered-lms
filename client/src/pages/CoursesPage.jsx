@@ -91,9 +91,15 @@ export default function CoursesPage() {
             {filtered.length > 0 ? filtered.map((course, i) => (
               <AnimatedSection key={course.id} className={`delay-${(i % 3) + 1}`}>
                 <Link to={`/courses/${course.id}`} className="card-hover" style={{ background: "#fff", borderRadius: "16px", textDecoration: "none", color: "#1a1a2e", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", overflow: "hidden", display: "block" }}>
-                  <div style={{ height: "160px", background: "linear-gradient(135deg, #6c63ff, #3b37d4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <span className="animate-float" style={{ fontSize: "48px" }}>📚</span>
-                  </div>
+                  <div style={{ height: "160px", overflow: "hidden" }}>
+  {course.thumbnail ? (
+    <img src={course.thumbnail} alt={course.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+  ) : (
+    <div style={{ height: "100%", background: "linear-gradient(135deg, #6c63ff, #3b37d4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <span className="animate-float" style={{ fontSize: "48px" }}>📚</span>
+    </div>
+  )}
+</div>
                   <div style={{ padding: "20px" }}>
                     <div style={{ fontSize: "12px", color: "#6c63ff", fontWeight: "600", marginBottom: "8px" }}>{course.category}</div>
                     <div style={{ fontWeight: "700", fontSize: "16px", marginBottom: "8px" }}>{course.title}</div>

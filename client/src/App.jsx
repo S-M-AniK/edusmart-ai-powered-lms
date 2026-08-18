@@ -10,6 +10,7 @@ import TeachersPage from "./pages/TeachersPage"
 import TeacherDetailPage from "./pages/TeacherDetailPage"
 import ReviewsPage from "./pages/ReviewsPage"
 import BlogPage from "./pages/BlogPage"
+import BlogDetailPage from "./pages/BlogDetailPage"
 import ContactPage from "./pages/ContactPage"
 import StudentDashboard from "./pages/student/StudentDashboard"
 import MyCourses from "./pages/student/MyCourses"
@@ -62,6 +63,7 @@ function App() {
         <Route path="/teachers/:id" element={<TeacherDetailPage />} />
         <Route path="/reviews" element={<ReviewsPage />} />
         <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:id" element={<BlogDetailPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

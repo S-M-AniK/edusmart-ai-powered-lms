@@ -9,7 +9,7 @@ function ManageBlogs() {
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editBlog, setEditBlog] = useState(null)
-  const [form, setForm] = useState({ title: "", content: "" })
+  const [form, setForm] = useState({ title: "", content: "", cover_image: "" })
 
   useEffect(() => {
     fetchBlogs()
@@ -28,13 +28,13 @@ function ManageBlogs() {
 
   function openCreate() {
     setEditBlog(null)
-    setForm({ title: "", content: "" })
+    setForm({ title: "", content: "", cover_image: "" })
     setShowModal(true)
   }
 
   function openEdit(blog) {
     setEditBlog(blog)
-    setForm({ title: blog.title, content: blog.content })
+    setForm({ title: blog.title, content: blog.content, cover_image: blog.cover_image || "" })
     setShowModal(true)
   }
 
@@ -48,7 +48,7 @@ function ManageBlogs() {
         await createBlog({ ...form, author_id: 1 })
         toast.success("Blog created!")
       }
-      setForm({ title: "", content: "" })
+      setForm({ title: "", content: "", cover_image: "" })
       setShowModal(false)
       setEditBlog(null)
       fetchBlogs()
@@ -102,15 +102,21 @@ function ManageBlogs() {
             <div key={blog.id} className="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md transition-shadow duration-300"
               style={{ animation: `fadeIn 0.4s ease-out ${i * 0.06}s both` }}>
               <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-semibold text-slate-900 text-lg">{blog.title}</h3>
-                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${blog.published ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"}`}>
-                      {blog.published ? "Published" : "Draft"}
-                    </span>
+                <div className="flex items-start gap-4 flex-1">
+                  {blog.cover_image && (
+                    <img src={blog.cover_image} alt={blog.title}
+                      className="w-20 h-16 object-cover rounded-lg shrink-0" />
+                  )}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="font-semibold text-slate-900 text-lg">{blog.title}</h3>
+                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${blog.published ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"}`}>
+                        {blog.published ? "Published" : "Draft"}
+                      </span>
+                    </div>
+                    <p className="text-slate-500 text-sm mb-2">by {blog.author_name} • {new Date(blog.created_at).toLocaleDateString()}</p>
+                    <p className="text-slate-600 text-sm line-clamp-2">{blog.content?.substring(0, 150)}...</p>
                   </div>
-                  <p className="text-slate-500 text-sm mb-2">by {blog.author_name} • {new Date(blog.created_at).toLocaleDateString()}</p>
-                  <p className="text-slate-600 text-sm line-clamp-2">{blog.content?.substring(0, 150)}...</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button onClick={() => openEdit(blog)}
@@ -147,6 +153,16 @@ function ManageBlogs() {
                 <input type="text" required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })}
                   placeholder="Blog post title"
                   className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#6366F1]" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Cover Image URL</label>
+                <input type="url" value={form.cover_image} onChange={e => setForm({ ...form, cover_image: e.target.value })}
+                  placeholder="https://example.com/image.jpg"
+                  className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#6366F1]" />
+                {form.cover_image && (
+                  <img src={form.cover_image} alt="Preview"
+                    className="mt-2 w-full h-40 object-cover rounded-lg border border-slate-200" />
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1.5">Content</label>

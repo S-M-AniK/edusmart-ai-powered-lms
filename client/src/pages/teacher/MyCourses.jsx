@@ -75,7 +75,12 @@ function MyCourses() {
           {filtered.map((course, i) => (
             <div key={course.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
               style={{ animation: `fadeIn 0.6s ease-out ${i * 0.08}s both` }}>
-              <div className={`h-32 bg-linear-to-br ${gradients[i % gradients.length]} relative`}>
+              <div className="h-32 relative overflow-hidden">
+                {course.thumbnail ? (
+                  <img src={course.thumbnail} alt={course.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  <div className={`w-full h-full bg-linear-to-br ${gradients[i % gradients.length]}`} />
+                )}
                 <span className={`absolute top-3 left-3 text-xs font-medium px-2 py-1 rounded-full ${
                   course.status === "published" ? "bg-white/90 text-emerald-600" :
                   course.status === "rejected" ? "bg-white/90 text-rose-600" :
@@ -103,8 +108,8 @@ function MyCourses() {
                     Delete
                   </button>
                   <Link to={`/teacher/courses/edit/${course.id}`}
-                       className="flex-1 py-2 rounded-lg font-medium text-center text-[#10B981] border border-[#10B981] hover:bg-[#10B981] hover:text-white transition-all duration-200 text-sm">
-                       Manage
+                    className="flex-1 py-2 rounded-lg font-medium text-center text-[#10B981] border border-[#10B981] hover:bg-[#10B981] hover:text-white transition-all duration-200 text-sm">
+                    Manage
                   </Link>
                 </div>
               </div>

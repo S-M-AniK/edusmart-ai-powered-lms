@@ -12,6 +12,13 @@ import ReviewsPage from "./pages/ReviewsPage"
 import BlogPage from "./pages/BlogPage"
 import BlogDetailPage from "./pages/BlogDetailPage"
 import ContactPage from "./pages/ContactPage"
+import RefundPage from "./pages/RefundPage"
+import PrivacyPage from "./pages/PrivacyPage"
+import TermsPage from "./pages/TermsPage"
+import UpcomingBatchesPage from "./pages/UpcomingBatchesPage"
+import FreeCoursesPage from "./pages/FreeCoursesPage"
+import LiveWorkshopPage from "./pages/LiveWorkshopPage"
+import BecomeInstructorPage from "./pages/BecomeInstructorPage"
 import StudentDashboard from "./pages/student/StudentDashboard"
 import MyCourses from "./pages/student/MyCourses"
 import LearningProgress from "./pages/student/LearningProgress"
@@ -65,6 +72,13 @@ function App() {
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:id" element={<BlogDetailPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/refund-policy" element={<RefundPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/upcoming-batches" element={<UpcomingBatchesPage />} />
+        <Route path="/free-courses" element={<FreeCoursesPage />} />
+        <Route path="/live-workshop" element={<LiveWorkshopPage />} />
+        <Route path="/become-instructor" element={<BecomeInstructorPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 

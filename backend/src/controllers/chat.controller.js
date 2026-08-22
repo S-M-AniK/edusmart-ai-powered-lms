@@ -4,7 +4,7 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
 export async function chat(req, res) {
   try {
-    const { message } = req.body
+    const { message, history = [] } = req.body
 
     if (!message) {
       return res.status(400).json({ success: false, message: "Message is required" })
@@ -21,19 +21,20 @@ export async function chat(req, res) {
 - Study tips
 - Career guidance in tech fields
 
-Be friendly, concise, and encouraging. Answer in the same language the user writes in.`
+Be friendly, concise, and encouraging. Answer in the same language the user writes in. Keep responses short and to the point — maximum 3-4 sentences or bullet points. No long explanations.`
         },
+        ...history,
         {
           role: "user",
           content: message
         }
       ],
-      model: "llama-3.3-70b-versatile",
+      model: "groq/compound-mini",
       max_tokens: 1024,
     })
 
-    const response = completion.choices[0]?.message?.content || "Sorry, I couldn't generate a response."
-
+    let response = completion.choices[0]?.message?.content || "Sorry, I couldn't generate a response."
+    response = response.replace(/<think>[\s\S]*?<\/think>/g, "").trim()
     res.json({ success: true, response })
   } catch (err) {
     console.error("Chat error:", err)

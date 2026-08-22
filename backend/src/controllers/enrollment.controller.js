@@ -28,9 +28,9 @@ export async function enrollCourse(req, res) {
     )
     const studentRes = await pool.query("SELECT name, email FROM users WHERE id = $1", [student_id])
     const courseRes = await pool.query("SELECT title FROM courses WHERE id = $1", [course_id])
-        if (studentRes.rows[0] && courseRes.rows[0]) {
-    sendEnrollmentEmail(studentRes.rows[0].email, studentRes.rows[0].name, courseRes.rows[0].title).catch(err => console.error("Enrollment email error:", err))
-}
+    if (studentRes.rows[0] && courseRes.rows[0]) {
+      sendEnrollmentEmail(studentRes.rows[0].email, studentRes.rows[0].name, courseRes.rows[0].title).catch(err => console.error("Enrollment email error:", err))
+    }
     res.status(201).json({ success: true, enrollment: result.rows[0] })
   } catch (err) {
     console.error("Enroll error:", err)
@@ -95,6 +95,14 @@ export async function updateProgress(req, res) {
 
     if (result.rows.length === 0) {
       return res.status(404).json({ success: false, message: "Enrollment not found" })
+    }
+
+    if (completed) {
+      await pool.query(
+        `INSERT INTO certificates (student_id, course_id) VALUES ($1, $2)
+         ON CONFLICT (student_id, course_id) DO NOTHING`,
+        [student_id, course_id]
+      )
     }
 
     res.json({ success: true, enrollment: result.rows[0] })

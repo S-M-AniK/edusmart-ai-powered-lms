@@ -21,11 +21,18 @@ function AIAssistant() {
 
     const userMessage = input.trim()
     setInput("")
-    setMessages(prev => [...prev, { sender: "user", text: userMessage }])
+
+    const updatedMessages = [...messages, { sender: "user", text: userMessage }]
+    setMessages(updatedMessages)
     setLoading(true)
 
     try {
-      const res = await API.post("/chat", { message: userMessage })
+      const history = updatedMessages.slice(-6).map(m => ({
+  role: m.sender === "user" ? "user" : "assistant",
+  content: m.text
+}))
+
+      const res = await API.post("/chat", { message: userMessage, history })
       setMessages(prev => [...prev, { sender: "bot", text: res.data.response }])
     } catch (err) {
       setMessages(prev => [...prev, { sender: "bot", text: "Sorry, I'm having trouble connecting. Please try again!" }])

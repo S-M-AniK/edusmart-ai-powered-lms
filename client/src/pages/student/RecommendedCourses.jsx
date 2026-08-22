@@ -2,10 +2,10 @@ import DashboardLayout from "../../components/DashboardLayout"
 import { Sparkles, Star, Clock } from "lucide-react"
 
 const recommended = [
-  { name: "Node.js Backend Mastery", teacher: "Arif Chowdhury", rating: 4.8, hours: "16h", reason: "Based on your React course", image: "from-green-400 to-green-600" },
-  { name: "Database Design Essentials", teacher: "Mou Akhter", rating: 4.7, hours: "14h", reason: "Popular with Python students", image: "from-indigo-400 to-indigo-600" },
-  { name: "Figma for UI Design", teacher: "Imran Hossain", rating: 4.9, hours: "10h", reason: "Goes well with UI/UX Basics", image: "from-pink-400 to-pink-600" },
-  { name: "Git & GitHub for Teams", teacher: "Tanvir Ahmed", rating: 4.6, hours: "8h", reason: "Trending this month", image: "from-orange-400 to-orange-600" },
+  { name: "Node.js Backend Mastery", teacher: "Arif Chowdhury", rating: 4.8, hours: "16h", reason: "Based on your React course", image: "from-green-400 to-green-600", thumbnail: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800" },
+  { name: "Database Design Essentials", teacher: "Mou Akhter", rating: 4.7, hours: "14h", reason: "Popular with Python students", image: "from-indigo-400 to-indigo-600", thumbnail: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800" },
+  { name: "Figma for UI Design", teacher: "Imran Hossain", rating: 4.9, hours: "10h", reason: "Goes well with UI/UX Basics", image: "from-pink-400 to-pink-600", thumbnail: "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=800" },
+  { name: "Git & GitHub for Teams", teacher: "Tanvir Ahmed", rating: 4.6, hours: "8h", reason: "Trending this month", image: "from-orange-400 to-orange-600", thumbnail: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800" },
 ]
 
 function RecommendedCourses() {
@@ -25,7 +25,13 @@ function RecommendedCourses() {
             key={course.name}
             className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-md transition-shadow"
           >
-            <div className={`h-32 bg-linear-to-br ${course.image}`}></div>
+            <div className="h-32 overflow-hidden">
+              {course.thumbnail ? (
+                <img src={course.thumbnail} alt={course.name} className="w-full h-full object-cover" />
+              ) : (
+                <div className={`w-full h-full bg-linear-to-br ${course.image}`}></div>
+              )}
+            </div>
             <div className="p-5">
               <span className="inline-block text-xs font-medium text-[#6366F1] bg-[#6366F1]/10 px-2 py-1 rounded-full mb-2">
                 {course.reason}

@@ -187,7 +187,7 @@ export default function HomePage() {
           <p style={{ color: "#666", marginBottom: "48px" }}>We provide the best learning experience</p>
         </AnimatedSection>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px", maxWidth: "1100px", margin: "0 auto" }}>
-          {[["🎓", "Expert Teachers", "Learn from industry professionals"], ["⏰", "Flexible Learning", "Study at your own pace"], ["📜", "Certification", "Get recognized certificates"], ["🤖", "AI Assistant", "Personalized learning support"]].map(([icon, title, desc], i) => (
+          {[["🎓", "Expert Teachers", "Learn from industry professionals"], ["⏰", "Flexible Learning", "Study at your own place"], ["📜", "Certification", "Get recognized certificates"], ["🤖", "AI Assistant", "Personalized learning support"]].map(([icon, title, desc], i) => (
             <AnimatedSection key={title} className={`delay-${i + 1}`}>
               <div className="card-hover" style={{ background: "rgba(255,255,255,0.85)", padding: "32px 24px", borderRadius: "16px", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", backdropFilter: "blur(6px)" }}>
                 <div className="animate-float" style={{ fontSize: "40px", marginBottom: "16px" }}>{icon}</div>
@@ -258,31 +258,95 @@ export default function HomePage() {
       </section>
 
       {/* Newsletter */}
-      <section style={{ padding: "80px 60px", background: "linear-gradient(135deg, #6c63ff, #3b37d4)", textAlign: "center", color: "#fff" }}>
+      <section style={{ padding: "80px 60px", background: "linear-gradient(135deg, #1a1a2e, #2d1b69)", textAlign: "center", color: "#fff" }}>
         <AnimatedSection>
           <h2 style={{ fontSize: "36px", fontWeight: "700", marginBottom: "12px" }}>Stay Updated</h2>
           <p style={{ marginBottom: "32px", opacity: 0.9 }}>Subscribe to our newsletter for the latest courses and updates</p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center", maxWidth: "500px", margin: "0 auto" }}>
-            <input type="email" placeholder="Enter your email" style={{ flex: 1, padding: "14px 20px", borderRadius: "10px", border: "none", fontSize: "16px" }} />
+            <input type="email" placeholder="Enter your email" style={{ flex: 1, padding: "14px 20px", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.3)", fontSize: "16px", background: "rgba(255,255,255,0.1)", color: "#fff" }} />d
             <button className="btn-hover" style={{ padding: "14px 28px", background: "#ffd700", color: "#1a1a2e", borderRadius: "10px", border: "none", fontWeight: "700", cursor: "pointer", fontSize: "16px" }}>Subscribe</button>
           </div>
         </AnimatedSection>
       </section>
 
       {/* Footer */}
-      <footer style={{ background: "#1a1a2e", color: "#fff", padding: "40px 60px", textAlign: "center" }}>
-        <div style={{ fontSize: "24px", fontWeight: "800", color: "#6c63ff", marginBottom: "16px" }}>Edu<span style={{ color: "#fff" }}>Smart</span></div>
-        <div style={{ display: "flex", gap: "24px", justifyContent: "center", marginBottom: "24px" }}>
-          {[["About", "/about"], ["Courses", "/courses"], ["Blog", "/blog"], ["Contact", "/contact"]].map(([label, path]) => (
-            <Link key={label} to={path} style={{ color: "#aaa", textDecoration: "none", transition: "color 0.2s" }}
-              onMouseEnter={e => e.currentTarget.style.color = "#6c63ff"}
-              onMouseLeave={e => e.currentTarget.style.color = "#aaa"}>
-              {label}
-            </Link>
-          ))}
+<footer style={{ background: "#fdf9f0", color: "#1a1a2e", padding: "60px 60px 30px 60px" }}>
+  <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr 1fr 1fr", gap: "40px", maxWidth: "1200px", margin: "0 auto", paddingBottom: "40px", borderBottom: "1px solid #e5e5e5" }}>
+
+    <div>
+      <div style={{ fontSize: "24px", fontWeight: "800", color: "#6c63ff", marginBottom: "12px" }}>Edu<span style={{ color: "#1a1a2e" }}>Smart</span></div>
+      <p style={{ color: "#666", fontSize: "14px", lineHeight: 1.7, marginBottom: "24px" }}>AI-Powered online learning platform for everyone.</p>
+      <div style={{ fontWeight: "700", fontSize: "14px", marginBottom: "12px", color: "#1a1a2e" }}>Download Our App</div>
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        <a href="#" style={{ background: "#000", borderRadius: "10px", padding: "8px 12px", display: "flex", alignItems: "center", gap: "8px", textDecoration: "none", color: "#fff", fontSize: "12px", fontWeight: "600" }}>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" style={{ height: "28px" }} />
+        </a>
+        <a href="#" style={{ background: "#000", borderRadius: "10px", padding: "8px 12px", display: "flex", alignItems: "center", gap: "8px", textDecoration: "none", color: "#fff", fontSize: "12px", fontWeight: "600" }}>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" style={{ height: "28px" }} />
+        </a>
+      </div>
+      <div style={{ fontWeight: "700", fontSize: "14px", marginBottom: "12px", color: "#1a1a2e" }}>Follow Us</div>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <a href="#" style={{ width: "38px", height: "38px", borderRadius: "50%", background: "#1877f2", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style={{ width: "18px" }} />
+        </a>
+        <a href="#" style={{ width: "38px", height: "38px", borderRadius: "50%", background: "linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style={{ width: "20px", borderRadius: "4px" }} />
+        </a>
+        <a href="#" style={{ width: "38px", height: "38px", borderRadius: "50%", background: "#ff0000", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" style={{ width: "22px" }} />
+        </a>
+        <a href="#" style={{ width: "38px", height: "38px", borderRadius: "50%", background: "#0077b5", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" style={{ width: "18px", borderRadius: "2px" }} />
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <div style={{ fontWeight: "700", fontSize: "16px", marginBottom: "20px" }}>Quick Links</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        {[["Upcoming Batches", "/upcoming-batches"], ["Free Courses", "/free-courses"], ["Live Workshop", "/live-workshop"], ["Become an Instructor", "/become-instructor"]].map(([label, path]) => (
+          <Link key={label} to={path} style={{ color: "#555", textDecoration: "none", fontSize: "14px" }}
+            onMouseEnter={e => e.currentTarget.style.color = "#6c63ff"}
+            onMouseLeave={e => e.currentTarget.style.color = "#555"}>
+            {label}
+          </Link>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <div style={{ fontWeight: "700", fontSize: "16px", marginBottom: "20px" }}>Contact</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", color: "#555", fontSize: "14px" }}>
+          <span>✉</span>
+          <span>support@edusmart.com</span>
         </div>
-        <div style={{ color: "#666", fontSize: "14px" }}>© 2025 EduSmart. All rights reserved.</div>
-      </footer>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", color: "#555", fontSize: "14px" }}>
+          <span>📍</span>
+          <span>Dhaka, Bangladesh</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style={{ fontWeight: "700", fontSize: "16px", marginBottom: "20px" }}>Company</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+       {[["About Us", "/about"], ["Refund Policy", "/refund-policy"], ["Privacy Policy", "/privacy-policy"], ["Terms & Conditions", "/terms"]].map(([label, path]) => (
+  <Link key={label} to={path} style={{ color: "#555", textDecoration: "none", fontSize: "14px" }}
+    onMouseEnter={e => e.currentTarget.style.color = "#6c63ff"}
+    onMouseLeave={e => e.currentTarget.style.color = "#555"}>
+    {label}
+  </Link>
+))}
+      </div>
+    </div>
+
+  </div>
+  <div style={{ textAlign: "center", paddingTop: "24px", color: "#999", fontSize: "14px", maxWidth: "1200px", margin: "0 auto" }}>
+    © 2025 EduSmart. All rights reserved.
+  </div>
+</footer>
     </div>
   )
 }

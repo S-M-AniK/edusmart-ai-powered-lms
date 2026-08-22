@@ -23,6 +23,15 @@ function MyCourses() {
     e.title.toLowerCase().includes(search.toLowerCase())
   )
 
+  const gradientColors = [
+    "linear-gradient(135deg, #818cf8, #4f46e5)",
+    "linear-gradient(135deg, #fbbf24, #d97706)",
+    "linear-gradient(135deg, #34d399, #059669)",
+    "linear-gradient(135deg, #fb7185, #e11d48)",
+    "linear-gradient(135deg, #38bdf8, #0284c7)",
+    "linear-gradient(135deg, #a78bfa, #7c3aed)",
+  ]
+
   return (
     <DashboardLayout>
       <div className="flex items-center justify-between mb-8" style={{ animation: "fadeIn 0.6s ease-out" }}>
@@ -55,7 +64,13 @@ function MyCourses() {
           {filtered.map((enroll, i) => (
             <div key={enroll.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-md hover:-translate-y-1 transition-all duration-300"
               style={{ animation: `fadeIn 0.6s ease-out ${i * 0.08}s both` }}>
-              <div className={`h-32 bg-linear-to-br ${gradients[i % gradients.length]}`}></div>
+              <div className="h-32 overflow-hidden">
+                {enroll.thumbnail ? (
+                  <img src={enroll.thumbnail} alt={enroll.title} className="w-full h-full object-cover" />
+                ) : (
+                  <div style={{ width: "100%", height: "100%", background: gradientColors[i % gradientColors.length] }}></div>
+                )}
+              </div>
               <div className="p-5">
                 <h3 className="font-semibold text-slate-900 mb-1">{enroll.title}</h3>
                 <p className="text-sm text-slate-500 mb-3">by {enroll.teacher_name}</p>

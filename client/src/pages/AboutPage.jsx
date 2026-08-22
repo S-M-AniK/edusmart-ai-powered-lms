@@ -72,6 +72,7 @@ export default function AboutPage() {
           ))}
         </div>
 
+
         <AnimatedSection>
           <h2 style={{ fontSize: "36px", fontWeight: "700", textAlign: "center", marginBottom: "40px" }}>Meet Our Team</h2>
         </AnimatedSection>

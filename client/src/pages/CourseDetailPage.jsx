@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link, useParams } from "react-router-dom"
 import { getCourseById } from "../api/courses"
-import { enrollCourse } from "../api/enrollments"
+import { enrollCourse, getStudentEnrollments } from "../api/enrollments"
 import { getCourseReviews } from "../api/reviews"
 import toast from "react-hot-toast"
 
@@ -12,6 +12,59 @@ function luhnCheck(num) {
     return acc + d
   }, 0)
   return sum % 10 === 0
+}
+
+function QuizSection({ quiz }) {
+  const [answers, setAnswers] = useState({})
+  const [submitted, setSubmitted] = useState(false)
+  const [score, setScore] = useState(0)
+
+  function handleSubmit() {
+    let s = 0
+    quiz.forEach((q, i) => { if (answers[i] === q.answer) s++ })
+    setScore(s)
+    setSubmitted(true)
+  }
+
+  return (
+    <div style={{ background: "#fff", padding: "32px", borderRadius: "20px", border: "1px solid #e2e8f0", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
+        <div style={{ width: "40px", height: "40px", background: "linear-gradient(135deg, #8b5cf6, #6c63ff)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>🧠</div>
+        <h2 style={{ fontSize: "20px", fontWeight: "800", margin: 0 }}>Quick Quiz</h2>
+      </div>
+      {submitted ? (
+        <div style={{ textAlign: "center", padding: "32px" }}>
+          <div style={{ fontSize: "56px", marginBottom: "16px" }}>{score === quiz.length ? "🎉" : score >= quiz.length / 2 ? "👍" : "📚"}</div>
+          <div style={{ fontSize: "28px", fontWeight: "800", marginBottom: "8px" }}>{score}/{quiz.length}</div>
+          <div style={{ color: "#64748b", marginBottom: "20px" }}>{score === quiz.length ? "Perfect score!" : score >= quiz.length / 2 ? "Good job!" : "Keep learning!"}</div>
+          <button onClick={() => { setAnswers({}); setSubmitted(false); setScore(0) }}
+            style={{ padding: "12px 28px", background: "#6c63ff", color: "#fff", borderRadius: "10px", border: "none", fontWeight: "700", cursor: "pointer" }}>
+            Try Again
+          </button>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+          {quiz.map((q, i) => (
+            <div key={i}>
+              <p style={{ fontWeight: "700", marginBottom: "12px", fontSize: "15px" }}>{i + 1}. {q.question}</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {q.options.map((opt, j) => (
+                  <button key={j} onClick={() => setAnswers({ ...answers, [i]: j })}
+                    style={{ padding: "12px 16px", borderRadius: "10px", border: answers[i] === j ? "2px solid #6c63ff" : "1.5px solid #e2e8f0", background: answers[i] === j ? "#f0f0ff" : "#f8fafc", textAlign: "left", cursor: "pointer", fontWeight: answers[i] === j ? "700" : "500", color: answers[i] === j ? "#6c63ff" : "#475569", fontSize: "14px" }}>
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+          <button onClick={handleSubmit} disabled={Object.keys(answers).length < quiz.length}
+            style={{ padding: "14px", background: Object.keys(answers).length < quiz.length ? "#e2e8f0" : "#6c63ff", color: Object.keys(answers).length < quiz.length ? "#94a3b8" : "#fff", borderRadius: "12px", border: "none", fontWeight: "800", fontSize: "15px", cursor: Object.keys(answers).length < quiz.length ? "not-allowed" : "pointer" }}>
+            Submit Quiz
+          </button>
+        </div>
+      )}
+    </div>
+  )
 }
 
 function PaymentModal({ course, onClose, onSuccess }) {
@@ -75,26 +128,16 @@ function PaymentModal({ course, onClose, onSuccess }) {
   ]
 
   const inputStyle = (hasError) => ({
-    width: "100%",
-    padding: "13px 16px",
-    borderRadius: "12px",
+    width: "100%", padding: "13px 16px", borderRadius: "12px",
     border: hasError ? "1.5px solid #f87171" : "1.5px solid #e2e8f0",
-    fontSize: "15px",
-    outline: "none",
-    boxSizing: "border-box",
-    background: hasError ? "#fff5f5" : "#f8fafc",
-    color: "#1e293b",
+    fontSize: "15px", outline: "none", boxSizing: "border-box",
+    background: hasError ? "#fff5f5" : "#f8fafc", color: "#1e293b",
     transition: "border-color 0.2s, box-shadow 0.2s",
   })
 
   const labelStyle = {
-    fontSize: "12px",
-    fontWeight: "700",
-    color: "#64748b",
-    marginBottom: "7px",
-    display: "block",
-    letterSpacing: "0.05em",
-    textTransform: "uppercase"
+    fontSize: "12px", fontWeight: "700", color: "#64748b", marginBottom: "7px",
+    display: "block", letterSpacing: "0.05em", textTransform: "uppercase"
   }
 
   const errorStyle = { color: "#ef4444", fontSize: "11px", marginTop: "5px", display: "flex", alignItems: "center", gap: "4px" }
@@ -102,7 +145,6 @@ function PaymentModal({ course, onClose, onSuccess }) {
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.7)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", backdropFilter: "blur(6px)" }}>
       <div style={{ background: "#fff", borderRadius: "24px", width: "100%", maxWidth: "480px", overflow: "hidden", boxShadow: "0 32px 80px rgba(0,0,0,0.25)", maxHeight: "92vh", overflowY: "auto" }}>
-
         <div style={{ background: "linear-gradient(135deg, #6c63ff 0%, #3b37d4 100%)", padding: "28px 28px 24px", color: "#fff", position: "relative" }}>
           <div style={{ position: "absolute", top: 0, right: 0, width: "200px", height: "200px", background: "radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -137,9 +179,7 @@ function PaymentModal({ course, onClose, onSuccess }) {
               <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
                 <div style={{ background: "linear-gradient(135deg, #1e293b, #334155)", borderRadius: "16px", padding: "20px 22px", color: "#fff", marginBottom: "4px" }}>
                   <div style={{ fontSize: "11px", opacity: 0.5, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "16px" }}>Card Preview</div>
-                  <div style={{ fontSize: "17px", letterSpacing: "3px", fontFamily: "monospace", marginBottom: "16px", minHeight: "24px" }}>
-                    {form.cardNumber || "•••• •••• •••• ••••"}
-                  </div>
+                  <div style={{ fontSize: "17px", letterSpacing: "3px", fontFamily: "monospace", marginBottom: "16px", minHeight: "24px" }}>{form.cardNumber || "•••• •••• •••• ••••"}</div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                     <div>
                       <div style={{ fontSize: "10px", opacity: 0.5, marginBottom: "2px" }}>CARD HOLDER</div>
@@ -152,7 +192,6 @@ function PaymentModal({ course, onClose, onSuccess }) {
                     <div style={{ fontSize: "28px", opacity: 0.6 }}>💳</div>
                   </div>
                 </div>
-
                 <div>
                   <label style={labelStyle}>Card Holder Name</label>
                   <input value={form.cardName} onChange={e => setForm({ ...form, cardName: e.target.value })} placeholder="Please enter your name" style={inputStyle(errors.cardName)} />
@@ -222,7 +261,6 @@ function PaymentModal({ course, onClose, onSuccess }) {
                     </div>
                     <div style={{ background: "rgba(255,255,255,0.2)", borderRadius: "20px", padding: "4px 12px", fontSize: "11px", color: "#fff", fontWeight: "700" }}>🔒 Secured</div>
                   </div>
-
                   <div style={{ background: "rgba(0,0,0,0.15)", borderRadius: "14px", padding: "16px 18px", marginBottom: "6px" }}>
                     <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.65)", fontWeight: "700", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Payment To</div>
                     <div style={{ color: "#fff", fontWeight: "700", fontSize: "14px" }}>{course.title}</div>
@@ -233,22 +271,16 @@ function PaymentModal({ course, onClose, onSuccess }) {
                     </div>
                   </div>
                 </div>
-
                 <div style={{ background: "#fff", padding: "20px", display: "flex", flexDirection: "column", gap: "14px" }}>
                   <div>
                     <div style={{ fontSize: "12px", fontWeight: "700", color: "#9d174d", marginBottom: "8px", letterSpacing: "0.05em", textTransform: "uppercase" }}>bKash Account Number</div>
                     <div style={{ position: "relative" }}>
                       <span style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", fontSize: "14px", fontWeight: "700", color: "#e2136e" }}>📱</span>
-                      <input
-                        value={form.bkashNumber}
-                        onChange={e => setForm({ ...form, bkashNumber: e.target.value.replace(/[^0-9]/g, "").slice(0, 11) })}
-                        placeholder="01XXXXXXXXX"
-                        style={{ width: "100%", padding: "13px 14px 13px 40px", borderRadius: "12px", border: errors.bkashNumber ? "2px solid #f87171" : "2px solid #fce7f3", fontSize: "15px", outline: "none", boxSizing: "border-box", background: errors.bkashNumber ? "#fff5f5" : "#fff5f9", color: "#1e293b", fontWeight: "600" }}
-                      />
+                      <input value={form.bkashNumber} onChange={e => setForm({ ...form, bkashNumber: e.target.value.replace(/[^0-9]/g, "").slice(0, 11) })} placeholder="01XXXXXXXXX"
+                        style={{ width: "100%", padding: "13px 14px 13px 40px", borderRadius: "12px", border: errors.bkashNumber ? "2px solid #f87171" : "2px solid #fce7f3", fontSize: "15px", outline: "none", boxSizing: "border-box", background: errors.bkashNumber ? "#fff5f5" : "#fff5f9", color: "#1e293b", fontWeight: "600" }} />
                     </div>
                     {errors.bkashNumber && <div style={errorStyle}>⚠ {errors.bkashNumber}</div>}
                   </div>
-
                   <div>
                     <div style={{ fontSize: "12px", fontWeight: "700", color: "#9d174d", marginBottom: "8px", letterSpacing: "0.05em", textTransform: "uppercase" }}>bKash PIN</div>
                     <div style={{ display: "flex", gap: "8px" }}>
@@ -258,17 +290,10 @@ function PaymentModal({ course, onClose, onSuccess }) {
                         </div>
                       ))}
                     </div>
-                    <input
-                      value={form.bkashPin}
-                      onChange={e => setForm({ ...form, bkashPin: e.target.value.replace(/[^0-9]/g, "").slice(0, 5) })}
-                      type="password"
-                      maxLength={5}
-                      placeholder="Enter 5-digit PIN"
-                      style={{ width: "100%", marginTop: "8px", padding: "12px 14px", borderRadius: "12px", border: errors.bkashPin ? "2px solid #f87171" : "2px solid #fce7f3", fontSize: "15px", outline: "none", boxSizing: "border-box", background: "#fff5f9", color: "#1e293b", letterSpacing: "6px", fontWeight: "700" }}
-                    />
+                    <input value={form.bkashPin} onChange={e => setForm({ ...form, bkashPin: e.target.value.replace(/[^0-9]/g, "").slice(0, 5) })} type="password" maxLength={5} placeholder="Enter 5-digit PIN"
+                      style={{ width: "100%", marginTop: "8px", padding: "12px 14px", borderRadius: "12px", border: errors.bkashPin ? "2px solid #f87171" : "2px solid #fce7f3", fontSize: "15px", outline: "none", boxSizing: "border-box", background: "#fff5f9", color: "#1e293b", letterSpacing: "6px", fontWeight: "700" }} />
                     {errors.bkashPin && <div style={errorStyle}>⚠ {errors.bkashPin}</div>}
                   </div>
-
                   <div style={{ background: "#fff5f9", borderRadius: "10px", padding: "10px 14px", display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#9d174d" }}>
                     <span>ℹ️</span> আপনার bKash একাউন্ট থেকে ৳{course.price} কেটে নেওয়া হবে
                   </div>
@@ -322,11 +347,17 @@ export default function CourseDetailPage() {
   const [enrolled, setEnrolled] = useState(false)
 
   useEffect(() => {
-    const u = JSON.parse(localStorage.getItem("user") || "null")
-    setUser(u)
-    getCourseById(id).then(res => { setCourse(res.data.course); setLoading(false) }).catch(() => setLoading(false))
-    getCourseReviews(id).then(res => setReviews(res.data.reviews)).catch(() => {})
-  }, [id])
+  const u = JSON.parse(localStorage.getItem("user") || "null")
+  setUser(u)
+  getCourseById(id).then(res => { setCourse(res.data.course); setLoading(false) }).catch(() => setLoading(false))
+  getCourseReviews(id).then(res => setReviews(res.data.reviews)).catch(() => {})
+  if (u?.id) {
+    getStudentEnrollments(u.id).then(res => {
+      const isEnrolled = res.data.enrollments?.some(e => e.course_id === parseInt(id))
+      if (isEnrolled) setEnrolled(true)
+    }).catch(() => {})
+  }
+}, [id])
 
   async function handlePaymentSuccess() {
     try {
@@ -413,6 +444,20 @@ export default function CourseDetailPage() {
 
       <section style={{ padding: "48px 60px", maxWidth: "1160px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 340px", gap: "40px" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+
+          {course.video_url && (
+            <div style={{ background: "#fff", padding: "32px", borderRadius: "20px", border: "1px solid #e2e8f0", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+                <div style={{ width: "40px", height: "40px", background: "linear-gradient(135deg, #ef4444, #dc2626)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>▶</div>
+                <h2 style={{ fontSize: "20px", fontWeight: "800", margin: 0 }}>Course Preview</h2>
+              </div>
+              <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: "12px", overflow: "hidden" }}>
+                <iframe src={course.video_url} title="Course Preview" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }} />
+              </div>
+            </div>
+          )}
+
           {course.what_you_learn && (
             <div style={{ background: "#fff", padding: "32px", borderRadius: "20px", border: "1px solid #e2e8f0", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
@@ -432,6 +477,8 @@ export default function CourseDetailPage() {
               <p style={{ color: "#475569", lineHeight: 1.8, margin: 0 }}>{course.requirements}</p>
             </div>
           )}
+
+          {course.quiz && course.quiz.length > 0 && <QuizSection quiz={course.quiz} />}
 
           {reviews.length > 0 && (
             <div style={{ background: "#fff", padding: "32px", borderRadius: "20px", border: "1px solid #e2e8f0", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
@@ -478,13 +525,11 @@ export default function CourseDetailPage() {
                 </div>
               )}
             </div>
-
             <div style={{ padding: "24px" }}>
               <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "20px" }}>
                 <span style={{ fontSize: "13px", color: "#6c63ff", fontWeight: "700" }}>৳</span>
                 <span style={{ fontSize: "38px", fontWeight: "800", color: "#6c63ff", letterSpacing: "-1px" }}>{course.price}</span>
               </div>
-
               {enrolled ? (
                 <div style={{ padding: "16px", background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: "12px", textAlign: "center" }}>
                   <div style={{ fontSize: "22px", marginBottom: "4px" }}>✅</div>
@@ -505,7 +550,6 @@ export default function CourseDetailPage() {
                   </Link>
                 </>
               )}
-
               <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "10px" }}>
                 {[["✅", "Full lifetime access"], ["📱", "Mobile & desktop access"], ["🏆", "Certificate of completion"], ["💬", "AI learning assistant"]].map(([icon, text]) => (
                   <div key={text} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "13px", color: "#475569" }}>
@@ -514,7 +558,6 @@ export default function CourseDetailPage() {
                   </div>
                 ))}
               </div>
-
               <div style={{ marginTop: "20px", padding: "12px 14px", background: "#f8fafc", borderRadius: "10px", textAlign: "center", fontSize: "11px", color: "#94a3b8", fontWeight: "600", letterSpacing: "0.03em" }}>
                 🔐 30-day money-back guarantee
               </div>

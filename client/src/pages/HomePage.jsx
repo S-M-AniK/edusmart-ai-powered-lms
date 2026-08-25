@@ -263,7 +263,7 @@ export default function HomePage() {
           <h2 style={{ fontSize: "36px", fontWeight: "700", marginBottom: "12px" }}>Stay Updated</h2>
           <p style={{ marginBottom: "32px", opacity: 0.9 }}>Subscribe to our newsletter for the latest courses and updates</p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center", maxWidth: "500px", margin: "0 auto" }}>
-            <input type="email" placeholder="Enter your email" style={{ flex: 1, padding: "14px 20px", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.3)", fontSize: "16px", background: "rgba(255,255,255,0.1)", color: "#fff" }} />d
+            <input type="email" placeholder="Enter your email" style={{ flex: 1, padding: "14px 20px", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.3)", fontSize: "16px", background: "rgba(255,255,255,0.1)", color: "#fff" }} />
             <button className="btn-hover" style={{ padding: "14px 28px", background: "#ffd700", color: "#1a1a2e", borderRadius: "10px", border: "none", fontWeight: "700", cursor: "pointer", fontSize: "16px" }}>Subscribe</button>
           </div>
         </AnimatedSection>

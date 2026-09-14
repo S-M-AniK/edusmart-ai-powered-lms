@@ -17,11 +17,11 @@ function LearningProgress() {
   useEffect(() => {
     fetch("http://localhost:8000/api/assignments/student/my", {
       headers: { Authorization: `Bearer ${token}` }
-    }).then(r => r.json()).then(setAssignments)
+    }).then(r => r.json()).then(data => setAssignments(Array.isArray(data) ? data : []))
 
     fetch("http://localhost:8000/api/quizzes/student/my", {
       headers: { Authorization: `Bearer ${token}` }
-    }).then(r => r.json()).then(setQuizzes)
+    }).then(r => r.json()).then(data => setQuizzes(Array.isArray(data) ? data : []))
   }, [])
 
   const submitAssignment = async (assignmentId) => {

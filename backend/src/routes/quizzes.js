@@ -1,9 +1,10 @@
 import express from 'express';
 import pool from '../config/db.js';
+import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const { course_id, title, description, time_limit_minutes, questions } = req.body;
   try {
     const quizResult = await pool.query(
@@ -39,7 +40,7 @@ router.get('/course/:courseId', async (req, res) => {
   }
 });
 
-router.get('/:id/questions', async (req, res) => {
+router.get('/:id/questions', auth, async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT * FROM quiz_questions WHERE quiz_id = $1`,
@@ -51,7 +52,7 @@ router.get('/:id/questions', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     await pool.query(`DELETE FROM quizzes WHERE id = $1 AND teacher_id = $2`, [req.params.id, req.user.id]);
     res.json({ message: 'Deleted' });
@@ -60,7 +61,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.post('/:id/attempt', async (req, res) => {
+router.post('/:id/attempt', auth, async (req, res) => {
   const { answers } = req.body;
   try {
     const questionsResult = await pool.query(
@@ -94,7 +95,7 @@ router.post('/:id/attempt', async (req, res) => {
   }
 });
 
-router.get('/student/my', async (req, res) => {
+router.get('/student/my', auth, async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT q.*, c.title as course_title,
@@ -112,7 +113,7 @@ router.get('/student/my', async (req, res) => {
   }
 });
 
-router.get('/:id/attempts', async (req, res) => {
+router.get('/:id/attempts', auth, async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT a.*, u.name as student_name, u.email as student_email

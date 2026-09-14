@@ -43,6 +43,8 @@ import Messages from "./pages/teacher/Messages"
 import TeacherAIAssistant from "./pages/teacher/TeacherAIAssistant"
 import TeacherNotifications from "./pages/teacher/TeacherNotifications"
 import TeacherProfile from "./pages/teacher/TeacherProfile"
+import TeacherAssignments from "./pages/teacher/Assignments"
+import TeacherQuizzes from "./pages/teacher/Quizzes"
 import AdminDashboard from "./pages/admin/AdminDashboard"
 import ManageTeachers from "./pages/admin/ManageTeachers"
 import ManageStudents from "./pages/admin/ManageStudents"
@@ -107,7 +109,8 @@ function App() {
         <Route path="/teacher/ai-assistant" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherAIAssistant /></ProtectedRoute>} />
         <Route path="/teacher/notifications" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherNotifications /></ProtectedRoute>} />
         <Route path="/teacher/profile" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherProfile /></ProtectedRoute>} />
-
+        <Route path="/teacher/assignments" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherAssignments /></ProtectedRoute>} />
+        <Route path="/teacher/quizzes" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherQuizzes /></ProtectedRoute>} />
         <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
         <Route path="/admin/teachers" element={<ProtectedRoute allowedRoles={["admin"]}><ManageTeachers /></ProtectedRoute>} />
         <Route path="/admin/students" element={<ProtectedRoute allowedRoles={["admin"]}><ManageStudents /></ProtectedRoute>} />

@@ -61,14 +61,45 @@ router.delete('/sections/:id', auth, async (req, res) => {
   }
 });
 
-router.post('/sections/:sectionId/lessons', auth, async (req, res) => {
-  const { title, type, video_url, content, duration_minutes, order_index, is_free } = req.body;
+router.post('/lessons/:id/complete', auth, async (req, res) => {
   try {
     const result = await pool.query(
-      `INSERT INTO course_lessons (section_id, title, type, video_url, content, duration_minutes, order_index, is_free)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-      [req.params.sectionId, title, type || 'video', video_url, content, duration_minutes || 0, order_index || 0, is_free || false]
+      `INSERT INTO lesson_progress (student_id, lesson_id, completed, completed_at)
+       VALUES ($1, $2, true, NOW())
+       ON CONFLICT (student_id, lesson_id) DO UPDATE SET completed = true, completed_at = NOW()
+       RETURNING *`,
+      [req.user.id, req.params.id]
     );
+
+    const lessonInfo = await pool.query(
+      `SELECT cs.course_id FROM course_lessons cl
+       JOIN course_sections cs ON cs.id = cl.section_id
+       WHERE cl.id = $1`,
+      [req.params.id]
+    );
+    const courseId = lessonInfo.rows[0]?.course_id;
+
+    if (courseId) {
+      const total = await pool.query(
+        `SELECT COUNT(*) FROM course_lessons WHERE section_id = ANY(
+          SELECT id FROM course_sections WHERE course_id = $1
+        )`,
+        [courseId]
+      );
+      const completed = await pool.query(
+        `SELECT COUNT(*) FROM lesson_progress lp
+         JOIN course_lessons cl ON cl.id = lp.lesson_id
+         JOIN course_sections cs ON cs.id = cl.section_id
+         WHERE cs.course_id = $1 AND lp.student_id = $2 AND lp.completed = true`,
+        [courseId, req.user.id]
+      );
+      const pct = Math.round((parseInt(completed.rows[0].count) / parseInt(total.rows[0].count)) * 100);
+      await pool.query(
+        `UPDATE enrollments SET progress = $1 WHERE student_id = $2 AND course_id = $3`,
+        [pct, req.user.id, courseId]
+      );
+    }
+
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });

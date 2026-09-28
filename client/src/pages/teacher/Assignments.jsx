@@ -61,7 +61,8 @@ export default function Assignments() {
       headers: { Authorization: `Bearer ${token}` }
     })
     const data = await res.json()
-    setSubmissions(data)
+    setSubmissions(Array.isArray(data) ? data : [])
+
     setShowSubmissions(true)
   }
 

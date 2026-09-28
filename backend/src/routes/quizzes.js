@@ -102,7 +102,7 @@ router.get('/student/my', auth, async (req, res) => {
         a.score, a.total_questions, a.completed_at
        FROM quizzes q
        JOIN courses c ON c.id = q.course_id
-       JOIN enrollments e ON e.course_id = q.course_id AND e.user_id = $1
+       JOIN enrollments e ON e.course_id = q.course_id AND e.student_id = $1
        LEFT JOIN quiz_attempts a ON a.quiz_id = q.id AND a.student_id = $1
        ORDER BY q.created_at DESC`,
       [req.user.id]

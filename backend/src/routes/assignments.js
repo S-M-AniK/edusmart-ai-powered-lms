@@ -93,7 +93,7 @@ router.get('/student/my', auth, async (req, res) => {
         s.submission_text, s.status, s.marks_obtained, s.feedback, s.submitted_at
        FROM assignments a
        JOIN courses c ON c.id = a.course_id
-       JOIN enrollments e ON e.course_id = a.course_id AND e.user_id = $1
+       JOIN enrollments e ON e.course_id = a.course_id AND e.student_id = $1
        LEFT JOIN assignment_submissions s ON s.assignment_id = a.id AND s.student_id = $1
        ORDER BY a.due_date ASC`,
       [req.user.id]

@@ -16,7 +16,7 @@ import certificateRoutes from "./routes/certificate.routes.js"
 import categoryRoutes from "./routes/category.routes.js"
 import assignmentRoutes from './routes/assignments.js'
 import quizRoutes from './routes/quizzes.js'
-
+import curriculumRoutes from './routes/curriculum.js'
 
 dotenv.config()
 
@@ -46,7 +46,7 @@ app.use("/api/certificates", certificateRoutes)
 app.use("/api/categories", categoryRoutes)
 app.use('/api/assignments', assignmentRoutes)
 app.use('/api/quizzes', quizRoutes)
-
+app.use('/api/curriculum', curriculumRoutes)
 
 const PORT = process.env.PORT || 8000
 

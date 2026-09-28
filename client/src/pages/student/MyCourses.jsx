@@ -61,7 +61,7 @@ function MyCourses() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((enroll, i) => (
-            <Link key={enroll.id} to={`/courses/${enroll.course_id}`} className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-md hover:-translate-y-1 transition-all duration-300 block"
+            <Link key={enroll.id} to={`/student/courses/${enroll.course_id}/content`} className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-md hover:-translate-y-1 transition-all duration-300 block"
               style={{ animation: `fadeIn 0.6s ease-out ${i * 0.08}s both`, textDecoration: "none", color: "inherit" }}>
               <div className="h-32 overflow-hidden">
                 {enroll.thumbnail ? (

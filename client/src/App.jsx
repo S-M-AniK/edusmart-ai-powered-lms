@@ -21,6 +21,7 @@ import LiveWorkshopPage from "./pages/LiveWorkshopPage"
 import BecomeInstructorPage from "./pages/BecomeInstructorPage"
 import StudentDashboard from "./pages/student/StudentDashboard"
 import MyCourses from "./pages/student/MyCourses"
+import CourseContent from "./pages/student/CourseContent"
 import LearningProgress from "./pages/student/LearningProgress"
 import Wishlist from "./pages/student/Wishlist"
 import RecommendedCourses from "./pages/student/RecommendedCourses"
@@ -86,6 +87,7 @@ function App() {
 
         <Route path="/student/dashboard" element={<ProtectedRoute allowedRoles={["student"]}><StudentDashboard /></ProtectedRoute>} />
         <Route path="/student/courses" element={<ProtectedRoute allowedRoles={["student"]}><MyCourses /></ProtectedRoute>} />
+        <Route path="/student/courses/:courseId/content" element={<ProtectedRoute allowedRoles={["student"]}><CourseContent /></ProtectedRoute>} />
         <Route path="/student/progress" element={<ProtectedRoute allowedRoles={["student"]}><LearningProgress /></ProtectedRoute>} />
         <Route path="/student/wishlist" element={<ProtectedRoute allowedRoles={["student"]}><Wishlist /></ProtectedRoute>} />
         <Route path="/student/recommended" element={<ProtectedRoute allowedRoles={["student"]}><RecommendedCourses /></ProtectedRoute>} />
